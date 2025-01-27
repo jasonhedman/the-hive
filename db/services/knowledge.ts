@@ -67,6 +67,7 @@ export const findRelevantKnowledge = async (query: number[]): Promise<(Knowledge
         await getKnowledgeContainer(),
         `SELECT TOP 10 c.id, c.summary, c.markdown, c.name, c.baseUrl, c.title, c.description, c.favicon, c.url, VectorDistance(c.summaryEmbedding, @query) AS distance
         FROM c 
+        WHERE VectorDistance(c.summaryEmbedding, @query) > 0.65
         ORDER BY VectorDistance(c.summaryEmbedding, @query)`,
         [{ name: "@query", value: query }]
     );

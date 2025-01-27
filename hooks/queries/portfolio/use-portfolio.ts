@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-import { Portfolio } from '@/services/birdeye';
+import { Portfolio } from '@/services/birdeye/types';
 
 export const usePortfolio = (address: string) => {
     const { data, isLoading, error, mutate } = useSWR<Portfolio>(

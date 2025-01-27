@@ -66,7 +66,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                     loading ? (
                         <Skeleton className="h-48 w-full" />
                     ) : (
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 max-h-[300px] overflow-y-scroll">
                             {
                                 input ? (
                                     results.length === 0 ? (

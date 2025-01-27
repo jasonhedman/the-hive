@@ -1,9 +1,8 @@
-import { getRaydiumPoolById } from "@/services/raydium";
-import { getToken, getTokenBySymbol } from "@/db/services";
-import { getTokenPairsFromAddress } from "@/services/dexscreener";
+
 
 import type { SolanaActionResult } from "../../solana-action";
 import type { GetTokenDataArgumentsType, GetTokenDataResultBodyType } from "./types";
+import { searchTokens, getTokenOverview } from "@/services/birdeye";
 
 /**
  * Gets the token data for a given ticker.
@@ -15,46 +14,23 @@ import type { GetTokenDataArgumentsType, GetTokenDataResultBodyType } from "./ty
 export async function getTokenData(args: GetTokenDataArgumentsType): Promise<SolanaActionResult<GetTokenDataResultBodyType>> {
   try {
 
-    if (args.address) {
-        const token = await getToken(args.address);
-        if (!token) throw new Error('No token data found');
-        const dexscreenerPairs = await getTokenPairsFromAddress(args.address);
-        
-        const pairs = await Promise.all(dexscreenerPairs.filter(pair => pair.dexId === "raydium").map(async (pair) => {
-            const raydiumPool = await getRaydiumPoolById(pair.pairAddress);
-            return {
-                pair,
-                pool: raydiumPool
-            };
-        }));
-        return {
-            message: `Found token data for ${args.address}. The user is shown the following token data in the UI, DO NOT REITERATE THE TOKEN DATA. Ask the user what they want to do next.`,
-            body: {
-                token,
-                pairs
-            }
-        }
-    } else if (args.ticker) {
-        const token = await getTokenBySymbol(args.ticker);
-        if (!token) throw new Error('No token data found');
-        const dexscreenerPairs = await getTokenPairsFromAddress(token.id);
-        const pairs = await Promise.all(dexscreenerPairs.filter(pair => pair.dexId === "raydium").map(async (pair) => {
-            const raydiumPool = await getRaydiumPoolById(pair.pairAddress);
-            return {
-                pair,
-                pool: raydiumPool
-            };
-        }));
-        return {
-            message: `Found token data for ${args.ticker}. The user is shown the following token data in the UI, DO NOT REITERATE THE TOKEN DATA. Ask the user what they want to do next.`,
-            body: {
-                token,
-                pairs
-            }
-        }
-    } else {
-        throw new Error('Invalid input');
+    const { items } = await searchTokens({ keyword: args.search });
+
+    const token = items?.[0]?.result?.[0];
+
+    if (!token) {
+      return {
+        message: `No token found for ${args.search}`,
+      };
     }
+
+    return {
+        message: `Token data for ${args.search}`,
+        body: {
+            token: await getTokenOverview(token.address),
+        },
+    };
+
   } catch (error) {
     console.error(error);
     return {

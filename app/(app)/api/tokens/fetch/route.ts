@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 
-// import { JupiterTokenData } from "@/types";
 // import { addToken, getToken } from "@/db/services/tokens";
+// import { JupiterTokenData } from "@/services/jupiter";
 
 export const POST = async () => {
     // const tokens = await fetch("https://tokens.jup.ag/tokens_with_markets");
     // const data: JupiterTokenData[] = await tokens.json();
     // for (let i = 0; i < data.length; i += 100) {
     //     const chunk = data.slice(i, i + 100);
-    //     console.log("chunk", i);
     //     await Promise.all(chunk.map(async token => {
     //         const tokenData = await getToken(token.address);
     //         if(!tokenData) {

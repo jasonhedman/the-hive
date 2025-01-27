@@ -43,10 +43,10 @@ const GetWalletAddressAction = ({ toolCallId }: { toolCallId: string }) => {
 
     const { user } = usePrivy();
 
-    const { addToolResult } = useChat();
+    const { addToolResult, isLoading } = useChat();
 
     useEffect(() => {
-        if(user?.wallet?.address) {
+        if(user?.wallet?.address && !isLoading) {
             addToolResult(toolCallId, {
                 message: "Wallet connected",
                 body: {
@@ -54,7 +54,7 @@ const GetWalletAddressAction = ({ toolCallId }: { toolCallId: string }) => {
                 }
             });
         }
-    }, [user]);
+    }, [user, isLoading]);
 
     const onComplete = (wallet: Wallet) => {
         addToolResult(toolCallId, {

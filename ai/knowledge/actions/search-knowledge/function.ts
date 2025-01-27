@@ -12,7 +12,11 @@ export const searchKnowledgeFunction = async (args: SearchKnowledgeArgumentsType
             value: phrase,
         });
 
-        return await findRelevantKnowledge(embedding);
+        const knowledge = await findRelevantKnowledge(embedding);
+
+        console.log(knowledge.map(k => k.distance));
+
+        return knowledge
     }));
 
 

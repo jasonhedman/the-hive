@@ -8,7 +8,6 @@ export const useRaydiumPool = (poolId: string) => {
     const { data, isLoading, error } = useSWR<ApiV3PoolInfoItem>(
         `/api/raydium/pool/${poolId}`,
         async () => {
-            console.log("fetching pool", poolId);
             return await fetch(`/api/raydium/pool/${poolId}`).then(res => res.json())
         },
         { refreshInterval: 5000 }

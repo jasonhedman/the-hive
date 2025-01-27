@@ -15,9 +15,10 @@ import { truncateAddress } from '@/lib/wallet';
 interface Props {
     hash: string;
     className?: string;
+    hideTransactionText?: boolean
 }
 
-const TransactionHash: React.FC<Props> = ({ hash, className }) => {
+const TransactionHash: React.FC<Props> = ({ hash, className, hideTransactionText }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -28,9 +29,13 @@ const TransactionHash: React.FC<Props> = ({ hash, className }) => {
 
     return (
         <div className="flex flex-row gap-1 items-center">
-            <p className="text-sm">
-                Transaction:
-            </p>
+            {
+                !hideTransactionText && (
+                    <p className="text-sm">
+                        Transaction:
+                    </p>
+                )
+            }
             <TooltipProvider>
                 <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>

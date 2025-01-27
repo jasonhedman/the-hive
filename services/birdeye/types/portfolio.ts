@@ -1,11 +1,19 @@
-export type PortfolioItem = {
+export type PortfolioResponseItem = {
     address: string;
-    name: string;
-    symbol: string;
     decimals: number;
-    balance: string;
+    balance: number;
     uiAmount: number;
     chainId: string;
+}
+
+export type PortfolioResponse = {
+    wallet: string;
+    items: PortfolioResponseItem[];
+}
+
+export type PortfolioItem = PortfolioResponseItem & {
+    name: string;
+    symbol: string;
     logoURI: string;
     priceUsd: number;
     valueUsd: number;

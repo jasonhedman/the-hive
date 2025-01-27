@@ -2,22 +2,26 @@
 
 import React from 'react'
 
+import { Button, Card } from '@/components/ui'
+
 import Address from '@/app/_components/address'
 
-import type { Token } from '@/db/types'
-import type { DexScreenerPair } from '@/services/dexscreener/types'
+import Links from './links'
+
 import { cn } from '@/lib/utils'
-import { Card } from '@/components/ui'
-import { AlertCircle } from 'lucide-react'
+
+import type { TokenOverview } from '@/services/birdeye/types'
+import Link from 'next/link'
+import { ArrowUpRightIcon } from 'lucide-react'
+
 
 interface Props {
-    token: Token,
-    topPair: DexScreenerPair
+    token: TokenOverview,
 }
 
-const GetTokenDataResultHeading: React.FC<Props> = ({ token, topPair }) => {
+const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
     return (
-        <Card className="p-2 flex justify-between gap-4">
+        <Card className="p-2 flex flex-col md:flex-row justify-between gap-4">
             <div className="flex items-center gap-2">
                 <img 
                     src={token.logoURI} 
@@ -25,37 +29,33 @@ const GetTokenDataResultHeading: React.FC<Props> = ({ token, topPair }) => {
                     className="w-10 h-10 rounded-full" 
                 />
                 <div className="flex flex-col">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex flex-col md:flex-row md:items-center md:gap-2">
                         <h1 className="text-xl font-bold">{token.name} ({token.symbol})</h1>
-                        <Address address={token.id} />
+                        <Address address={token.address} />
+                        <Link href={`/token/${token.address}`}>
+                            <Button variant="ghost" className="p-1 h-fit w-fit">
+                                <ArrowUpRightIcon className="w-4 h-4" />
+                            </Button>
+                        </Link>
                     </div>
                     <p className="text-sm font-semibold flex items-center gap-1">
-                        ${topPair.priceUsd} 
+                        ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} 
                         {
-                            topPair.priceChange && (
+                            token.priceChange24hPercent && (
                                 <span 
                                     className={cn(
                                         "text-xs",
-                                        topPair.priceChange.h24 > 0 ? "text-green-500" : "text-red-500"
+                                        token.priceChange24hPercent > 0 ? "text-green-500" : "text-red-500"
                                     )}
                                 >
-                                    {topPair.priceChange ? `(${topPair.priceChange.h24 > 0 ? "+" : ""}${topPair.priceChange.h24}%)` : ""}
+                                    {token.priceChange24hPercent ? `(${token.priceChange24hPercent > 0 ? "+" : ""}${token.priceChange24hPercent.toFixed(2)}%)` : ""}
                                 </span>
                             )
                         }
                     </p>
                 </div>
             </div>
-            <div className="flex items-center gap-2">
-                {
-                    token.mintAuthority && (
-                        <AlertCircle className="w-4 h-4 text-red-500" />
-                    )
-                }
-                <p className="text-xs">
-                    {token.mintAuthority ? "Mintable" : "Not Mintable"}
-                </p>
-            </div>
+            <Links token={token} />
         </Card>
     )
 }

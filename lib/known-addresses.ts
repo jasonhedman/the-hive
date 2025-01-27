@@ -7,6 +7,10 @@ export const knownAddresses: Record<string, { name: string, logo: string }> = {
         name: "Raydium",
         logo: "/dexes/raydium.png",
     },
+    "LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo": {
+        name: "Meteora",
+        logo: "/dexes/raydium.png",
+    },
     "u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w": {
         name: "Gate.io",
         logo: "/exchanges/gate.png",

@@ -83,22 +83,6 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
     const onSubmit = async () => {
         if(!wallet || !wallet.address) return;
         setIsDepositing(true);
-        console.log({
-            amountInA: new TokenAmount(
-                toToken(pool.mintA),
-                new Decimal(amountA).mul(10 ** pool.mintA.decimals).toFixed(0)
-            ).toExact(),
-            amountInB: new TokenAmount(
-                toToken(pool.mintB), 
-                new Decimal(amountB).mul(10 ** pool.mintB.decimals).toFixed(0)
-            ).toExact(),
-            otherAmountMin: new TokenAmount(
-                toToken(baseIn ? pool.mintA : pool.mintB),
-                new Decimal(otherAmountMin).mul(10 ** (baseIn ? pool.mintA.decimals : pool.mintB.decimals)).toFixed(0)
-            ).toExact(),
-            fixedSide: baseIn ? "a" : "b",
-            txVersion: TxVersion.V0
-        });
         try {
             const raydium = await raydiumTransactionClient(wallet.address);
             const { transaction } = await raydium.liquidity.addLiquidity({

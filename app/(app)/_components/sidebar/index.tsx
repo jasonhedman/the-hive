@@ -16,7 +16,6 @@ import {
     SidebarMenu as SidebarMenuUI,
 } from '@/components/ui'
 
-
 import AuthButton from './auth-button';
 import Logo from './logo';
 import SidebarMenu from './sidebar-menu';
@@ -70,7 +69,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                                 asChild 
                             >
                                 <Link 
-                                    href={"https://discord.gg/6brt2aC9"} 
+                                    href={"https://discord.gg/8TVcFvySWG"} 
                                     target={'_blank'}
                                 >
                                     <FaDiscord />

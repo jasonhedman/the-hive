@@ -17,10 +17,10 @@ const GetTokenAddress: React.FC<Props> = ({ tool, prevToolAgent }) => {
     return (
         <ToolCard 
             tool={tool}
-            loadingText={`Getting ${tool.args.symbol} Address...`}
+            loadingText={`Getting ${tool.args.keyword} Address...`}
             result={{
                 heading: (result: GetTokenAddressResultType) => result.body 
-                    ? `Fetched ${tool.args.symbol} Address` 
+                    ? `Fetched ${tool.args.keyword} Address` 
                     : `Failed to fetch token address`,
                 body: (result: GetTokenAddressResultType) => result.body 
                     ? (

@@ -1,11 +1,12 @@
 import React from 'react'
 
+import { Card } from '@/components/ui';
+
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
 import type { GetTrendingTokensResultBodyType, GetTrendingTokensResultType } from '@/ai';
-import type { JupiterTokenData } from '@/services/jupiter';
-import { Card } from '@/components/ui';
+import type { TrendingToken } from '@/services/birdeye/types';
 
 interface Props {
     tool: ToolInvocation,
@@ -38,18 +39,17 @@ const TrendingTokens = ({ body }: { body: GetTrendingTokensResultBodyType }) => 
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {body.tokens.map((token: JupiterTokenData, index: number) => (
+            {body.tokens.map((token: TrendingToken) => (
                 <TokenCard
                     key={token.address} 
                     token={token} 
-                    price={body.prices[index]}
                 />
             ))}
         </div>
     )
 }
 
-const TokenCard = ({ token, price }: { token: JupiterTokenData, price: number }) => {
+const TokenCard = ({ token }: { token: TrendingToken }) => {
     return (
         <Card className="flex flex-col gap-2 p-2 justify-center">
             <div className="flex flex-row items-center gap-2">
@@ -60,11 +60,11 @@ const TokenCard = ({ token, price }: { token: JupiterTokenData, price: number })
                 />
                 <div className="flex flex-col">
                     <p className="text-sm font-bold">{token.name} ({token.symbol})</p>
-                    <p className="text-xs text-muted-foreground">${price.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                    <p className="text-xs text-muted-foreground">${token.price.toLocaleString(undefined, { maximumFractionDigits: 5})} <span className={token.price24hChangePercent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price24hChangePercent > 0 ? '+' : ''}{token.price24hChangePercent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span></p>
                 </div>
             </div>
             <div className="flex flex-col">
-                <p className="text-xs text-muted-foreground">24h Volume: ${token.daily_volume.toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">24h Volume: ${token.volume24hUSD.toLocaleString()}</p>
             </div>
         </Card>
     )

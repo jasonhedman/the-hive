@@ -3,7 +3,8 @@
 import React from 'react'
 
 import GetTokenDataResultHeading from './heading';
-import Links from './links';
+import Stats from './stats';
+import TwentyFourHrStats from './24hr-stats';
 
 import type { GetTokenDataResultBodyType } from '@/ai';
 
@@ -12,14 +13,19 @@ interface Props {
 }
 
 const GetTokenDataResult: React.FC<Props> = ({ body }) => {
-    const { token, pairs } = body;
-
-    const topPair = pairs[0];
+    const { token } = body;
 
     return (
         <div className="flex flex-col gap-2 w-full">
-            <GetTokenDataResultHeading token={token} topPair={topPair.pair} />
-            <Links topPair={topPair.pair} />
+            <GetTokenDataResultHeading token={token} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <Stats
+                    token={token}
+                />
+                <TwentyFourHrStats
+                    token={token}
+                />
+            </div>
         </div>
     )
 }

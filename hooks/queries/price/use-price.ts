@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-import { Price } from '@/services/birdeye';
+import { Price } from '@/services/birdeye/types';
 
 export const usePrice = (mint: string) => {
     const { data, isLoading, error, mutate } = useSWR<Price>(

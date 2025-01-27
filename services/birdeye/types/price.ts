@@ -3,4 +3,5 @@ export interface Price {
     updateUnixTime: number;
     updateHumanTime: string;
     liquidity: number;
+    priceChange24h: number;
 } 
