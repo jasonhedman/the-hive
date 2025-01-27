@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Card, Skeleton } from '@/components/ui';
 
-import TokenChart from '@/app/(app)/_components/token-chart';
+import TokenChart from '@/app/(app)/_components/token/chart';
 
 import ToolCard from '../tool-card';
 

@@ -62,7 +62,6 @@ export function CandlestickChart({
                 horzLines: { color: colors.lineColor },
             },
             width: chartContainerRef.current.clientWidth,
-            height: height,
             handleScroll: false,
             handleScale: false,
             rightPriceScale: {

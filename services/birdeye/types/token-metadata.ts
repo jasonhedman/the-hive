@@ -1,4 +1,4 @@
-interface TokenMetadataExtensions {
+export interface TokenMetadataExtensions {
     coingecko_id?: string;
     serum_v3_usdc?: string;
     serum_v3_usdt?: string;

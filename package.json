@@ -36,6 +36,7 @@
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@raydium-io/raydium-sdk-v2": "0.1.101-alpha",
     "@solana/spl-token": "^0.4.9",
@@ -78,7 +79,7 @@
     "swr": "^2.3.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "twitter-api-v2": "^1.18.2",
+    "twitter-api-v2": "^1.19.0",
     "viem": "^2.21.56",
     "zod": "^3.24.1"
   },

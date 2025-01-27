@@ -2,8 +2,9 @@
 
 import React from 'react'
 
-import { useNativeBalance, useTokenAccounts } from '@/hooks';
 import { Skeleton } from '@/components/ui';
+
+import { useNativeBalance, useTokenAccounts } from '@/hooks';
 
 interface Props {
     address: string;

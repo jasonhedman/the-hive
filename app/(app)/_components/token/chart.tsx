@@ -62,17 +62,17 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
 
     return (
         <div className='flex flex-col gap-2'>
-            <div className='flex flex-row justify-between items-center'>
+            <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-1'>
                 {
                     isLoading ? (
                         <Skeleton className='h-4 w-24' />
                     ) : (
-                        <p className='text-lg font-bold'>
+                        <p className='text-md md:text-lg font-bold'>
                             ${data[data.length - 1].c.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={cn(change > 0 ? 'text-green-500' : 'text-red-500')}>({change > 0 ? '+' : ''}{change.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
                         </p>
                     )
                 }
-                <div className='flex flex-row gap-2'>
+                <div className='flex flex-row gap-1'>
                     {
                         WINDOWS.map((window) => (
                             <Button 
@@ -82,7 +82,7 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
                                     setTimeframe(window.timeframe)
                                 }}
                                 variant={numDays === window.numDays && timeframe === window.timeframe ? 'brand' : 'ghost'}
-                                className='text-sm h-fit w-fit p-1'
+                                className='text-sm h-fit w-fit px-1 py-0.5'
                             >
                                 {window.label}
                             </Button>
