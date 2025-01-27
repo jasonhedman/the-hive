@@ -24,7 +24,7 @@ const Tweet: React.FC<Props> = ({ tweet }) => {
                                         src={item.url}
                                         alt="Tweet media"
                                         className="w-full h-full object-cover rounded-lg"
-                                        style={{ maxHeight: '300px' }}
+                                        style={{ maxHeight: '300px', maxWidth: '300px' }}
                                     />
                                 );
                             case 'video':
@@ -39,7 +39,7 @@ const Tweet: React.FC<Props> = ({ tweet }) => {
                                         loop={item.type === 'animated_gif'}
                                         muted
                                         className="w-full h-full object-cover rounded-lg"
-                                        style={{ maxHeight: '300px' }}
+                                        style={{ maxHeight: '300px', maxWidth: '300px' }}
                                     />
                                 ) : null;
                             default:
@@ -62,7 +62,7 @@ const Tweet: React.FC<Props> = ({ tweet }) => {
                 <p className="text-md font-bold truncate">{user.name}</p>
                 <p className="text-sm text-muted-foreground">@{user.username}</p>
             </div>
-            <p className="text-md">{tweetData.text}</p>
+            <p className="text-sm">{tweetData.text}</p>
             {renderMedia()}
         </div>
     )

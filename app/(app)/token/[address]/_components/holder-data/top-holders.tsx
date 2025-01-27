@@ -51,28 +51,21 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
         fetchData();
     }, [mint]);
 
+    if(isLoading) {
+        return <Skeleton className="h-full w-full" />
+    }
+
     return (
-        <div className="flex flex-col gap-2 h-full max-h-full">
-            <h2 className="text-lg font-bold">Top Holders</h2>
-            {
-                isLoading ? (
-                    <div className="flex flex-col gap-2 flex-1 h-0 overflow-y-auto no-scrollbar">
-                        <Skeleton className="h-full w-full" />
-                    </div>
-                ) : (
-                    <div className="flex flex-col gap-2 flex-1 h-0 overflow-y-auto no-scrollbar">
-                        {topHolders.map((topHolder, index) => (
-                            <TopHolder
-                                key={topHolder.owner} 
-                                topHolder={topHolder}
-                                percentageOwned={topHolder.ui_amount / totalSupply * 100}
-                                index={index}
-                                knownAddresses={knownAddressesWithStreamflow}
-                            />
-                        ))}
-                    </div>
-                )
-            }
+        <div className="flex flex-col gap-2">
+            {topHolders.map((topHolder, index) => (
+                <TopHolder
+                    key={topHolder.owner} 
+                    topHolder={topHolder}
+                    percentageOwned={topHolder.ui_amount / totalSupply * 100}
+                    index={index}
+                    knownAddresses={knownAddressesWithStreamflow}
+                />
+            ))}
         </div>
     )
 }

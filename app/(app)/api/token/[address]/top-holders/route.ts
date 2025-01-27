@@ -8,7 +8,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     const { items: topHolders } = await getTokenHolders({
         address,
         offset: 0,
-        limit: 10
+        limit: 20
     });
     
     return NextResponse.json(topHolders);

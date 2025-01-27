@@ -27,3 +27,4 @@ export * from "./animated-beam";
 export * from "./table";
 export * from "./candlestick-chart";
 export * from "./optional-link";
+export * from "./tabs";

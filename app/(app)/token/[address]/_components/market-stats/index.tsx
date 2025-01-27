@@ -54,7 +54,7 @@ interface StatItemProps {
 
 const StatItem: React.FC<StatItemProps> = ({ label, value, formatOptions = {}, prefix = '' }) => {
     return (
-        <div className="flex flex-col border rounded-md p-2 border-neutral-100 dark:border-neutral-700">
+        <div className="flex flex-col border rounded-md p-2 border-neutral-200 dark:border-neutral-700">
             <h3 className="text-xs font-semibold">
                 {label}
             </h3>
