@@ -36,8 +36,8 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@hellomoon/api':
-        specifier: ^1.23.0
-        version: 1.23.0(@types/node@20.17.10)(typescript@5.7.2)
+        specifier: ^1.23.2
+        version: 1.23.2(@types/node@20.17.10)(typescript@5.7.2)
       '@jup-ag/api':
         specifier: ^6.0.32
         version: 6.0.32
@@ -1268,8 +1268,8 @@ packages:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
 
-  '@hellomoon/api@1.23.0':
-    resolution: {integrity: sha512-jas+sp8O1HgRkvSBsgxqlNbYFnxKKKHPWKGy1yOl5/LwgFrUI6b2FHO5aX7ZhJ4msuFvHFtreQ04b6f3Hm32gA==}
+  '@hellomoon/api@1.23.2':
+    resolution: {integrity: sha512-AB4l0uqi9/w44pzsXAKcU7a5pIh/edDCuyfqf/r0K+qv1mj8TYsHjeF96xj6w5rhGa1M1tfT4GRvvPWyP7XKGA==}
 
   '@heroicons/react@2.2.0':
     resolution: {integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==}
@@ -9800,7 +9800,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@hellomoon/api@1.23.0(@types/node@20.17.10)(typescript@5.7.2)':
+  '@hellomoon/api@1.23.2(@types/node@20.17.10)(typescript@5.7.2)':
     dependencies:
       axios: 1.7.9
       dotenv: 16.4.7

@@ -1,11 +1,11 @@
-import { getSmartMoneyInflows as getSmartMoneyInflowsService, getTokenInfo } from "@/services/hellomoon";
+import { getSmartMoneyInflows as getSmartMoneyInflowsService } from "@/services/hellomoon";
 
 import type { GetSmartMoneyInflowsArgumentsType, GetSmartMoneyInflowsResultBodyType } from "./types";
 import type { SolanaActionResult } from "../../solana-action";
 import { SmartMoneyTokenInflow } from "@/services/hellomoon/types";
-import { TokenInfo } from "@/services/hellomoon/types";
-import { getPrice, getPrices, getTokenMetadata } from "@/services/birdeye";
-import { Price, TokenMetadata } from "@/services/birdeye/types";
+import { getPrices, getTokenMetadata } from "@/services/birdeye";
+
+import type { Price, TokenMetadata } from "@/services/birdeye/types";
 
 /**
  * Gets the trending tokens from Birdeye API.

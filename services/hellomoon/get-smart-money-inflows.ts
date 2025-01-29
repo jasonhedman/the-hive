@@ -1,12 +1,13 @@
-import { hellomoonPost } from "./base";
+import { TokenSmartMoneyInflowRequest, TokenSmartMoneyInflow } from "@hellomoon/api";
 
-import type { SmartMoneyInflowsResponse, Granularity } from "./types";
+import client from "./client";
 
-export const getSmartMoneyInflows = async (granularity: Granularity, limit: number = 10) => {
-    const response = await hellomoonPost<SmartMoneyInflowsResponse>('token/smart-money-inflow', {
+import { Granularity } from "./types";
+
+export const getSmartMoneyInflows = async (granularity: Granularity, limit: number = 10): Promise<TokenSmartMoneyInflow[]> => {
+    const response = await client.send(new TokenSmartMoneyInflowRequest({
         granularity,
         limit,
-    });
-
-    return response;
+    }));
+    return response.data;
 }
