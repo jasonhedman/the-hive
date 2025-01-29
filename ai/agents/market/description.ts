@@ -1,7 +1,8 @@
 import { 
     SOLANA_GET_TRENDING_TOKENS_NAME,
     SOLANA_GET_TOP_TRADERS_NAME,
-    SOLANA_GET_TRADER_TRADES_NAME
+    SOLANA_GET_TRADER_TRADES_NAME,
+    SOLANA_GET_SMART_MONEY_INFLOWS_NAME
 } from "@/ai/action-names";
 
 export const MARKET_AGENT_DESCRIPTION =
@@ -11,6 +12,7 @@ You have access to the following tools:
 - ${SOLANA_GET_TRENDING_TOKENS_NAME}
 - ${SOLANA_GET_TOP_TRADERS_NAME}
 - ${SOLANA_GET_TRADER_TRADES_NAME}
+- ${SOLANA_GET_SMART_MONEY_INFLOWS_NAME}
 
 You can use these tools to help users with getting token data and trending tokens.
 

@@ -14,8 +14,6 @@ export const searchKnowledgeFunction = async (args: SearchKnowledgeArgumentsType
 
         const knowledge = await findRelevantKnowledge(embedding);
 
-        console.log(knowledge.map(k => k.distance));
-
         return knowledge
     }));
 
