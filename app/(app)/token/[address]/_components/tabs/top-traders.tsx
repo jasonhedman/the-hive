@@ -26,20 +26,20 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
     }
 
     return (
-        <Table className="text-center flex-1 h-0 overflow-hidden">
+        <Table className="flex-1 h-0 overflow-hidden">
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-8 text-center">Rank</TableHead>
-                    <TableHead className="text-center">Trader</TableHead>
-                    <TableHead className="text-center">Trades</TableHead>
-                    <TableHead className="text-center">Volume</TableHead>
+                    <TableHead className="w-16 pl-4">Rank</TableHead>
+                    <TableHead>Trader</TableHead>
+                    <TableHead>Trades</TableHead>
+                    <TableHead>Volume</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody className="h-0 overflow-y-auto no-scrollbar">
                 {topTraders.map((trader, index) => (
                     <TableRow key={trader.owner}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell className="">
+                        <TableCell className="pl-4">{index + 1}</TableCell>
+                        <TableCell className="w-48">
                             {knownAddresses[trader.owner] ? (
                                 <div className="flex flex-row items-center gap-2">
                                     <Image
@@ -53,7 +53,7 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
                                     </span>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center h-full">
+                                <div className="flex flex-col justify-center h-full">
                                     <WalletAddress 
                                         address={trader.owner} 
                                         className="font-medium"

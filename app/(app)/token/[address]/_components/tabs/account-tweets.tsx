@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Separator, Skeleton } from '@/components/ui';
 
-import Tweet from './tweet';
+import Tweet from '@/app/_components/tweet';
 
 import { useAccountTweets } from '@/hooks';
 

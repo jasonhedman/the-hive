@@ -5,6 +5,14 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { Skeleton } from "@/components/ui";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableHead,
+    TableRow,
+    TableCell,
+} from "@/components/ui/table";
 
 import WalletAddress from "@/app/_components/wallet-address";
 
@@ -56,17 +64,26 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
     }
 
     return (
-        <div className="flex flex-col gap-2">
-            {topHolders.map((topHolder, index) => (
-                <TopHolder
-                    key={topHolder.owner} 
-                    topHolder={topHolder}
-                    percentageOwned={topHolder.ui_amount / totalSupply * 100}
-                    index={index}
-                    knownAddresses={knownAddressesWithStreamflow}
-                />
-            ))}
-        </div>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-16 pl-4">Rank</TableHead>
+                    <TableHead>Holder</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {topHolders.map((topHolder, index) => (
+                    <TopHolder
+                        key={topHolder.owner} 
+                        topHolder={topHolder}
+                        percentageOwned={topHolder.ui_amount / totalSupply * 100}
+                        index={index}
+                        knownAddresses={knownAddressesWithStreamflow}
+                    />
+                ))}
+            </TableBody>
+        </Table>
     )
 }
 
@@ -79,33 +96,34 @@ interface TopHolderProps {
 
 const TopHolder = ({ topHolder, percentageOwned, index, knownAddresses }: TopHolderProps) => {
     return (
-        <div className="flex flex-row items-center gap-2">
-            <p className="text-sm text-muted-foreground">
-                {index + 1})
-            </p>
-            <div className="flex justify-between w-full">
-                {
-                    knownAddresses[topHolder.owner] ? (
-                        <div className="flex flex-row items-center gap-2">
-                            <Image
-                                src={knownAddresses[topHolder.owner].logo}
-                                alt={knownAddresses[topHolder.owner].name}
-                                width={16}
-                                height={16}
-                            />
-                            <p className="text-sm font-bold">
-                                {knownAddresses[topHolder.owner].name}
-                            </p>
-                        </div>
-                    ) : (
-                        <WalletAddress 
-                            address={topHolder.owner} 
-                            className="text-sm font-bold"
+        <TableRow>
+            <TableCell className="pl-4">
+                {index + 1}
+            </TableCell>
+            <TableCell>
+                {knownAddresses[topHolder.owner] ? (
+                    <div className="flex flex-row items-center gap-2">
+                        <Image
+                            src={knownAddresses[topHolder.owner].logo}
+                            alt={knownAddresses[topHolder.owner].name}
+                            width={16}
+                            height={16}
                         />
+                        <p className="font-bold">
+                            {knownAddresses[topHolder.owner].name}
+                        </p>
+                    </div>
+                ) : (
+                    <WalletAddress 
+                        address={topHolder.owner} 
+                        className="font-bold"
+                    />
                 )}
-                <p className="text-xs">{topHolder.ui_amount.toLocaleString()} ({percentageOwned.toFixed(2)}%)</p>
-            </div>
-        </div>
+            </TableCell>
+            <TableCell className="text-right">
+                {topHolder.ui_amount.toLocaleString()} ({percentageOwned.toFixed(2)}%)
+            </TableCell>
+        </TableRow>
     )
 }
 
