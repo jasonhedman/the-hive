@@ -3,7 +3,7 @@ import React from 'react'
 import { GiSwapBag } from 'react-icons/gi'
 import { IoSwapHorizontal } from 'react-icons/io5'
 import { MdBubbleChart } from 'react-icons/md'
-import { FaXTwitter, FaAt } from 'react-icons/fa6'
+import { FaXTwitter, FaAt, FaWater } from 'react-icons/fa6'
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui'
 
@@ -14,6 +14,7 @@ import TopTraders from './top-traders';
 import BubbleMap from './bubble-map';
 import AccountTweets from './account-tweets';
 import AccountMentions from './account-mentions';
+import TokenMarkets from './markets'
 
 interface Props {
     address: string;
@@ -40,6 +41,10 @@ const TokenDashboardTabs: React.FC<Props> = async ({ address }) => {
                     <MdBubbleChart className="w-4 h-4" />
                     Bubble Map
                 </TabsTrigger>
+                <TabsTrigger value="markets">
+                    <FaWater className="w-4 h-4" />
+                    Markets
+                </TabsTrigger>
                 {
                     tokenOverview.extensions.twitter && (
                         <>
@@ -64,6 +69,9 @@ const TokenDashboardTabs: React.FC<Props> = async ({ address }) => {
                 </TabsContent>
                 <TabsContent value="bubble" className="h-full m-0 p-2">
                     <BubbleMap address={address} />
+                </TabsContent>
+                <TabsContent value="markets" className="h-full m-0">
+                    <TokenMarkets address={address} />
                 </TabsContent>
                 {
                     tokenOverview.extensions.twitter && (

@@ -1,4 +1,4 @@
-export enum Source {
+export enum MarketSource {
     Raydium = "Raydium",
     RaydiumClamm = "Raydium Clamm",
     MeteoraDlmm = "Meteora Dlmm",
@@ -20,7 +20,7 @@ export interface MarketItem {
     liquidity: number;
     name: string;
     price: number;
-    source: Source;
+    source: MarketSource;
     volume24h: number;
     trade24h: number;
     trade24hChangePercent: number;
