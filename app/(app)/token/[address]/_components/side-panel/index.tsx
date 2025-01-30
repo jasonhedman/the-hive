@@ -42,7 +42,7 @@ const SidePanel: React.FC<Props> = async ({ address }) => {
             </TabsList>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
                 <TabsContent value="chat" className="h-full m-0 p-2">
-                    <ChatProvider tokenAddress={address}>
+                    <ChatProvider tokenMetadata={tokenMetadata}>
                         <Chat token={tokenMetadata} />
                     </ChatProvider>
                 </TabsContent>

@@ -7,7 +7,6 @@ import {
     Collapsible, 
     CollapsibleTrigger, 
     CollapsibleContent, 
-    Icon 
 } from '@/components/ui'
 
 import { cn } from '@/lib/utils'

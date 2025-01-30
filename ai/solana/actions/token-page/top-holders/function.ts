@@ -30,8 +30,6 @@ export async function getTokenPageTopHolders(
             }, {} as Record<string, KnownAddress>)
         }
 
-        console.log(knownAddressesWithStreamflow);
-
         const holdersWithAnnotations = topHolders.map((holder) => {
             const knownAddress = knownAddressesWithStreamflow[holder.owner_account];
             return {
@@ -41,16 +39,38 @@ export async function getTokenPageTopHolders(
             };
         });
 
-        console.log(holdersWithAnnotations.filter(holder => holder.type === AddressType.VestingVault));
+        const { eoa, vesting, exchange } = holdersWithAnnotations.reduce((acc, holder) => {
+            if (holder.type === AddressType.EOA) {
+                acc.eoa.push({
+                    name: holder.owner,
+                    type: AddressType.EOA,
+                    percentOfSupply: holder.percentOfSupply
+                });
+            } else if (holder.type === AddressType.VestingVault) {
+                acc.vesting.push({
+                    name: holder.owner,
+                    type: AddressType.VestingVault,
+                    percentOfSupply: holder.percentOfSupply
+                });
+            } else if (holder.type === AddressType.CentralizedExchange || holder.type === AddressType.DecentralizedExchange) {
+                acc.exchange.push({
+                    name: holder.owner,
+                    type: AddressType.CentralizedExchange,
+                    percentOfSupply: holder.percentOfSupply
+                });
+            }
+            return acc;
+        }, {
+            eoa: [],
+            vesting: [],
+            exchange: []
+        } as Record<string, { name: string, type: AddressType, percentOfSupply: number }[]>);
 
-        const top10HoldersPercent = topHolders.slice(0, 10).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
-        const top20HoldersPercent = topHolders.slice(0, 20).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
-        const exchangeHoldersPercent = holdersWithAnnotations
-            .filter(holder => holder.type === AddressType.CentralizedExchange || holder.type === AddressType.DecentralizedExchange)
-            .reduce((acc, curr) => acc + curr.percentOfSupply, 0);
-        const vestedHoldersPercent = holdersWithAnnotations
-            .filter(holder => holder.type === AddressType.VestingVault)
-            .reduce((acc, curr) => acc + curr.percentOfSupply, 0);
+        const top10HoldersPercent = eoa.slice(0, 10).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
+        const top20HoldersPercent = eoa.slice(0, 20).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
+        
+        const exchangeHoldersPercent = exchange.reduce((acc, curr) => acc + curr.percentOfSupply, 0);
+        const vestedHoldersPercent = vesting.reduce((acc, curr) => acc + curr.percentOfSupply, 0);
 
         return {
             message: `This analysis shows the token distribution among the largest holders. The top 10 addresses hold ${(top10HoldersPercent * 100).toFixed(2)}% of the total supply, while expanding to the top 20 addresses accounts for ${(top20HoldersPercent * 100).toFixed(2)}%. Among these top holders, ${(exchangeHoldersPercent * 100).toFixed(2)}% is held by cryptocurrency exchanges (both centralized and decentralized). Additionally, ${(vestedHoldersPercent * 100).toFixed(2)}% is locked in vesting vaults, suggesting structured token release schedules for early investors, team members, or other stakeholders.`,

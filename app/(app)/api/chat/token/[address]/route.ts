@@ -8,23 +8,18 @@ import { xai } from '@ai-sdk/xai';
 import { google } from '@ai-sdk/google';
 import { deepseek } from '@ai-sdk/deepseek';
 
-import { Models } from "@/types/models";
-import { SolanaTokenPageTopHoldersAction, solanaTools } from "@/ai";
 import { Connection } from "@solana/web3.js";
 
-const system = (address: string) =>
-`You are a blockchain agent that is specialized in the token with the address ${address}.`
+import { Models } from "@/types/models";
+import { SolanaTokenPageTopHoldersAction, solanaTools } from "@/ai";
+import type { TokenMetadata } from "@/services/birdeye/types";
 
-export const POST = async (req: NextRequest, { params }: { params: Promise<{ address: string }> }) => {
+const system = (tokenMetadata: TokenMetadata) =>
+`You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.symbol}) with the address ${tokenMetadata.address}.`
 
-    console.log("POST /api/chat/token/[address]");
+export const POST = async (req: NextRequest) => {
 
-    const { address } = await params;
-
-    const { messages, modelName } = await req.json();
-
-    console.log("messages", messages);
-    console.log("modelName", modelName);
+    const { messages, modelName, tokenMetadata } = await req.json();
     
     let MAX_TOKENS: number | undefined = undefined;
     let model: LanguageModelV1 | undefined = undefined;
@@ -76,13 +71,13 @@ export const POST = async (req: NextRequest, { params }: { params: Promise<{ add
         }
     }
 
-    let streamTextResult = streamText({
+    const streamTextResult = streamText({
         model,
         messages: truncatedMessages,
-        system: system(address),
+        system: system(tokenMetadata),
         tools: solanaTools(
             new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!), 
-            [new SolanaTokenPageTopHoldersAction(address)]
+            [new SolanaTokenPageTopHoldersAction(tokenMetadata.address)]
         )
     });
 

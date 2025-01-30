@@ -2,8 +2,6 @@
 
 import React from 'react'
 
-import { Logo } from '@/components/ui';
-
 import ChatInput from './input';
 import StarterButtons from './starter-buttons';
 

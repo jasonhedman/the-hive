@@ -44,14 +44,16 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
             compressed && "md:px-2 md:flex-col gap-0 md:gap-1",
             nextMessageSameRole && "pb-0",
             previousMessageSameRole && "pt-0",
+            (previousMessageSameRole && compressed) && "border-b border-gray-200 dark:border-neutral-700 pt-2",
             !nextMessageSameRole && "border-b border-gray-200 dark:border-neutral-700",
             className,
 
         )}>
             <div className={cn(
                 "flex items-center md:items-start gap-2 md:gap-4",
+                previousMessageSameRole && "hidden md:block",
                 compressed && "md:gap-2 md:flex md:items-center",
-                previousMessageSameRole && "hidden md:block"
+                (previousMessageSameRole && compressed) && "hidden md:hidden"
             )}>
                 <div className={cn(
                     "hidden md:flex items-center justify-center w-6 h-6 md:w-10 md:h-10 rounded-full",
@@ -80,6 +82,7 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
                 <p className={cn(
                     "text-sm font-semibold md:hidden",
                     compressed && "hidden md:block",
+                    previousMessageSameRole && "hidden md:hidden",
                     isUser ? "text-neutral-900 dark:text-neutral-100" : "text-brand-600 dark:text-brand-600"
                 )}>
                     {message.role === 'user' ? 'You' : 'The Hive'}
@@ -145,6 +148,9 @@ const MessageMarkdown = React.memo(({ content, compressed }: { content: string, 
                     },
                     h6({ children }) {
                         return <h6 className={cn("text-xs font-bold")}>{children}</h6>
+                    },
+                    li({ children }) {
+                        return <li className="text-xs md:text-sm">{children}</li>
                     },
                     p({ children, node }) {
                         const hasBlockElements = node?.children?.some((child: { type: string, tagName: string }) => 
