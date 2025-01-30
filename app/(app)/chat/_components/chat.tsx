@@ -12,8 +12,6 @@ const Chat: React.FC = () => {
 
     const { messages } = useChat();
 
-    console.log(messages);
-
     const cleanedMessages = messages.filter(message => message.role !== 'system');
 
     return (

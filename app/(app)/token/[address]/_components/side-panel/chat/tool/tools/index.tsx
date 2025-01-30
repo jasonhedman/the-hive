@@ -1,0 +1,1 @@
+export { default as TopHolders } from "./top-holders";

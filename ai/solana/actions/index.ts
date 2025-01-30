@@ -35,3 +35,4 @@ export * from './raydium';
 export * from './staking';
 export * from './wallet';
 export * from './token';
+export * from './token-page';

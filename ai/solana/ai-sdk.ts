@@ -32,7 +32,7 @@ export const solanaTool = <TActionSchema extends SolanaActionSchemaAny, TResultB
     });
 }
 
-export const solanaTools = (connection: Connection) => getAllSolanaActions().reduce((acc, action) => {
+export const solanaTools = (connection: Connection, actions: SolanaAction<any, any>[] = getAllSolanaActions()) => actions.reduce((acc, action) => {
     acc[action.name] = solanaTool(action, connection);
     return acc;
 }, {} as Record<string, CoreTool>);

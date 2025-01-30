@@ -17,8 +17,6 @@ export async function getLiquidStakingYields(
   try {
     const bestLiquidStaking = await getBestLiquidStaking(6);
 
-    console.log(bestLiquidStaking);
-
     return {
       message: `Found ${bestLiquidStaking.data.rewardOptions.length} best liquid staking yields. The user has been shown the options in the UI, ask them which they want to use. DO NOT REITERATE THE OPTIONS IN TEXT.`,
       body: (await Promise.all(bestLiquidStaking.data.rewardOptions.map(async (option) => ({
