@@ -75,7 +75,7 @@ const TimeStats: React.FC<Props> = ({ token }) => {
     const makers = getMakers(timePeriod)
 
     return (
-        <div className="flex flex-col border rounded-md border-neutral-200 dark:border-neutral-700 overflow-hidden">
+        <div className="flex flex-col border rounded-md border-neutral-200 dark:border-neutral-700">
             <div className="flex w-full border-b border-neutral-200 dark:border-neutral-700">
                 {
                     Object.entries(TimePeriod).map(([label, period]) => {

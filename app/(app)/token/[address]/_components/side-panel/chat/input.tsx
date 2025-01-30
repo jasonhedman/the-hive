@@ -8,13 +8,14 @@ import Textarea from 'react-textarea-autosize'
 
 import { Button, Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui';
 
-import { useEnterSubmit } from '../_hooks';
+import { ModelSelector } from '@/app/(app)/_components/chat';
 
-import { useChat } from '../_contexts/chat';
+import { useEnterSubmit } from '@/app/(app)/_hooks';
+
+import { useChat } from '../../../_contexts';
 
 import { cn } from '@/lib/utils';
 
-import ModelSelector from '../../_components/chat/model-selector';
 import { usePrivy } from '@privy-io/react-auth';
 
 const ChatInput: React.FC = () => {
@@ -39,7 +40,7 @@ const ChatInput: React.FC = () => {
                 // Light mode styles
                 "bg-neutral-100 focus-within:border-brand-600",
                 // Dark mode styles
-                "dark:bg-neutral-800/50 dark:focus-within:border-brand-600",
+                "dark:bg-neutral-700/50 dark:focus-within:border-brand-600",
                 isLoading && "opacity-50 cursor-not-allowed"
             )}
         >

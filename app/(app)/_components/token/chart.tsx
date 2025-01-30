@@ -62,7 +62,7 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
 
     return (
         <div className='flex flex-col gap-2'>
-            <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-1'>
+            <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-neutral-700 p-2'>
                 {
                     isLoading ? (
                         <Skeleton className='h-4 w-24' />
@@ -90,22 +90,24 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
                     }
                 </div>
             </div>
-            {
-                isLoading ? (
-                    <Skeleton style={{ height, width: '100%' }} />
-                ) : (
-                    <CandlestickChart
-                        data={data.map(price => ({
-                            time: price.unixTime as UTCTimestamp,
-                            open: price.o,
-                            high: price.h,
-                            low: price.l,
-                            close: price.c,
-                        }))} 
-                        height={height}
-                    />
-                )
-            }
+            <div className='p-2'>
+                {
+                    isLoading ? (
+                        <Skeleton style={{ height, width: '100%' }} />
+                    ) : (
+                        <CandlestickChart
+                            data={data.map(price => ({
+                                time: price.unixTime as UTCTimestamp,
+                                open: price.o,
+                                high: price.h,
+                                low: price.l,
+                                close: price.c,
+                            }))} 
+                            height={height}
+                        />
+                    )
+                }
+            </div>
         </div>
     )
 }

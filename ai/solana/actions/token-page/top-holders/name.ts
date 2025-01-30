@@ -1,0 +1,1 @@
+export const SOLANA_TOKEN_PAGE_TOP_HOLDERS_NAME = "token-top-holders-analysis"; 

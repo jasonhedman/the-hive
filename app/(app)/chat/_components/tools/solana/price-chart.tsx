@@ -40,7 +40,7 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
     const { data: tokenMetadata, isLoading } = useTokenMetadata(tokenAddress);
 
     return (
-        <Card className="w-full p-4 flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-2">
             {
                 isLoading ? (
                     <Skeleton className="w-full h-8" />
@@ -59,8 +59,10 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
                     )
                 )
             }
-            <TokenChart mint={tokenAddress} />
-        </Card>
+            <Card className="overflow-hidden">
+                <TokenChart mint={tokenAddress} />
+            </Card>
+        </div>
     )
 }
 

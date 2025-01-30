@@ -26,7 +26,7 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
     }
 
     return (
-        <Table className="flex-1 h-0 overflow-hidden">
+        <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-16 pl-4">Rank</TableHead>
@@ -35,7 +35,7 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
                     <TableHead>Volume</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody className="h-0 overflow-y-auto no-scrollbar">
+            <TableBody>
                 {topTraders.map((trader, index) => (
                     <TableRow key={trader.owner}>
                         <TableCell className="pl-4">{index + 1}</TableCell>

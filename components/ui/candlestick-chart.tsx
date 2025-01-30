@@ -69,6 +69,7 @@ export function CandlestickChart({
             },
             timeScale: {
                 borderColor: colors.lineColor,
+                visible: false,
             },
         });
         chartRef.current = chart;

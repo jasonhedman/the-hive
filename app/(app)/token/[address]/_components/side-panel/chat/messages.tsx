@@ -2,31 +2,36 @@
 
 import React, { useEffect } from 'react'
 
-import Message from './message';
-
-import LoadingMessage from './loading-message';
+import { LoadingMessage, Message } from '@/app/(app)/_components/chat';
 
 import { useScrollAnchor } from '@/app/(app)/chat/_hooks';
 
-import { useChat } from '../../_contexts/chat';
-
-import type { Message as MessageType } from 'ai';
-
+import { useChat } from '@/app/(app)/token/[address]/_contexts/use-chat';
+import Tool from './tool';
 
 interface Props {
-    messages: MessageType[];
     messageClassName?: string;
 }
 
-const Messages: React.FC<Props> = ({ messages, messageClassName }) => {
+const Messages: React.FC<Props> = ({ messageClassName }) => {
 
-    const { isResponseLoading } = useChat();
+    const { messages, isResponseLoading } = useChat();
 
     const { scrollRef, messagesRef, scrollToBottom } = useScrollAnchor();
     
     useEffect(() => {
         scrollToBottom();
     }, [messages, scrollToBottom]);
+
+    if (messages.length === 0) {
+        return (
+            <div className="flex-1 flex flex-col w-full justify-center items-center" ref={scrollRef}>
+                <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+                    Start chatting with your token!
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-1 h-0 flex flex-col w-full overflow-y-auto max-w-full no-scrollbar" ref={scrollRef}>
@@ -37,10 +42,12 @@ const Messages: React.FC<Props> = ({ messages, messageClassName }) => {
                         message={message} 
                         className={messageClassName} 
                         previousMessage={index > 0 ? messages[index - 1] : undefined} 
-                        nextMessage={index < messages.length - 1 ? messages[index + 1] : undefined} 
+                        nextMessage={index < messages.length - 1 ? messages[index + 1] : undefined}
+                        compressed={true}
+                        ToolComponent={Tool}
                     />
                 ))}
-                {isResponseLoading && <LoadingMessage />}
+                {isResponseLoading && <LoadingMessage compressed />}
             </div>
         </div>
     )

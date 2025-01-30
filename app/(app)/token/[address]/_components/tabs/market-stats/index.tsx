@@ -2,10 +2,11 @@
 
 import React from 'react'
 
+import { Skeleton } from '@/components/ui';
+
 import TimeStats from './time-stats';
 
 import { useTokenOverview } from '@/hooks';
-import { Skeleton } from '@/components/ui';
 
 interface Props {
     address: string;
@@ -20,14 +21,11 @@ const MarketStats: React.FC<Props> = ({ address }) => {
     }
 
     return (
-        <div className='flex flex-col gap-2'>
-            <h2 className="text-lg font-semibold">
-                Market Stats
-            </h2>
+        <div className='flex flex-col gap-2 h-full max-h-full overflow-y-auto no-scrollbar'>
             {
                 tokenOverview ? (
                     <>
-                        <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                             <StatItem label="Market Cap" value={tokenOverview.mc} prefix="$" />
                             <StatItem label="Liquidity" value={tokenOverview.liquidity} prefix="$" />
                             <StatItem label="# of Holders" value={tokenOverview.holder} />
