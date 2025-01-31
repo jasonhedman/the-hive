@@ -1,21 +1,20 @@
 import { getTopTokenHolders } from "@/services/hellomoon";
-
-import type { TokenPageTopHoldersArgumentsType, TokenPageTopHoldersResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../solana-action";
 import { getStreamsByMint } from "@/services/streamflow";
+
 import { knownAddresses } from "@/lib/known-addresses";
+
+import type { TokenPageTopHoldersResultBodyType, TokenPageTopHoldersArgumentsType } from "./types";
+import type { SolanaActionResult } from "../../../solana/actions/solana-action";
+import type { TokenChatData } from "@/types";
 import { AddressType, KnownAddress } from "@/types/known-address";
 
-export async function getTokenPageTopHolders(
-  tokenAddress: string,
-  _: TokenPageTopHoldersArgumentsType
-): Promise<SolanaActionResult<TokenPageTopHoldersResultBodyType>> {
+export async function getTokenPageTopHolders(token: TokenChatData, _: TokenPageTopHoldersArgumentsType): Promise<SolanaActionResult<TokenPageTopHoldersResultBodyType>> {
     try {
         const numHolders = 50;
-
+        
         const [topHolders, streamflowVaults] = await Promise.all([
-            getTopTokenHolders(tokenAddress, numHolders),
-            getStreamsByMint(tokenAddress)
+            getTopTokenHolders(token.address, numHolders),
+            getStreamsByMint(token.address)
         ]);
 
         const knownAddressesWithStreamflow = {

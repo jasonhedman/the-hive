@@ -84,6 +84,14 @@ export function CandlestickChart({
 
         candlestickSeries.setData(data);
 
+        candlestickSeries.applyOptions({
+            priceFormat: {
+                type: 'price',
+                precision: 4,
+                minMove: 0.00001,
+            },
+        });
+
         chart.timeScale().fitContent();
 
         window.addEventListener('resize', handleResize);

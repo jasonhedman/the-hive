@@ -30,9 +30,9 @@ const StarterButton: React.FC<Props> = ({ icon, title, prompt, className }) => {
             variant="outline"
             onClick={() => sendMessage(prompt)}
         >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 max-w-full">
                 <Icon name={icon} className="w-4 h-4" />
-                <p className="text-md font-bold">
+                <p className="text-sm font-bold text-wrap text-left">
                     {title}
                 </p>
             </div>

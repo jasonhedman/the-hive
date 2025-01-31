@@ -29,8 +29,6 @@ const TokenMarkets: React.FC<Props> = ({ address }) => {
         return <div className="flex-1 h-0 overflow-hidden">No markets found</div>
     }
 
-    console.log(markets);
-
     return (
         <Table className="">
             <TableHeader>
@@ -59,10 +57,16 @@ const TokenMarkets: React.FC<Props> = ({ address }) => {
                             ${market.volume24h.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2, notation: "compact" })}
                         </TableCell>
                         <TableCell>
-                            {market.trade24h.toLocaleString(undefined, { maximumFractionDigits: 0, notation: "compact" })} <span className={market.trade24hChangePercent > 0 ? "text-green-500" : "text-red-500"}>({market.trade24hChangePercent.toFixed(2)}%)</span>
+                            {market.trade24h.toLocaleString(undefined, { maximumFractionDigits: 0, notation: "compact" })}
+                            {market.trade24hChangePercent !== null && (
+                                <span className={market.trade24hChangePercent > 0 ? "text-green-500" : "text-red-500"}> ({market.trade24hChangePercent.toFixed(2)}%)</span>
+                            )}
                         </TableCell>
                         <TableCell>
-                            {market.uniqueWallet24h.toLocaleString(undefined, { maximumFractionDigits: 0, notation: "compact" })} <span className={market.uniqueWallet24hChangePercent > 0 ? "text-green-500" : "text-red-500"}>({market.uniqueWallet24hChangePercent.toFixed(2)}%)</span>
+                            {market.uniqueWallet24h.toLocaleString(undefined, { maximumFractionDigits: 0, notation: "compact" })}
+                            {market.uniqueWallet24hChangePercent !== null && (
+                                <span className={market.uniqueWallet24hChangePercent > 0 ? "text-green-500" : "text-red-500"}> ({market.uniqueWallet24hChangePercent.toFixed(2)}%)</span>
+                            )}
                         </TableCell>
                     </TableRow>
                 ))}
@@ -73,12 +77,18 @@ const TokenMarkets: React.FC<Props> = ({ address }) => {
 
 export const MarketType = ({ type, address, tokenAddress }: { type: MarketSource, address: string, tokenAddress: string }) => {
 
+    console.log(type, address);
+
     const marketTypeIcons = {
         [MarketSource.Raydium]: "/dexes/raydium.png",
         [MarketSource.RaydiumClamm]: "/dexes/raydium.png",
+        [MarketSource.RaydiumCp]: "/dexes/raydium.png",
         [MarketSource.MeteoraDlmm]: "/dexes/meteora.png",
+        [MarketSource.Meteora]: "/dexes/meteora.png",
         [MarketSource.Orca]: "/dexes/orca.png",
     } as const;
+
+    console.log(marketTypeIcons[type]);
 
     return (
         <div className="flex flex-row items-center gap-2">
@@ -100,7 +110,9 @@ export const MarketLink = ({ source, address, tokenAddress }: { source: MarketSo
     const marketLinks = {
         [MarketSource.Raydium]: `https://raydium.io/liquidity/increase/?mode=add&pool_id=${address}`,
         [MarketSource.RaydiumClamm]: `https://raydium.io/clmm/create-position/?pool_id=${address}`,
+        [MarketSource.RaydiumCp]: `https://raydium.io/liquidity/increase/?mode=add&pool_id=${address}`,
         [MarketSource.MeteoraDlmm]: `https://app.meteora.ag/dlmm/${address}`,
+        [MarketSource.Meteora]: `https://app.meteora.ag/pools/${address}`,
         [MarketSource.Orca]: `https://www.orca.so/pools?tokens=${tokenAddress}`,
     } as const;
 

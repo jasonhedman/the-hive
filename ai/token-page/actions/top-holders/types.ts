@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { TokenPageTopHoldersInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../solana-action";
+import { SolanaActionResult } from "../../../solana/actions/solana-action";
 
 export type TokenPageTopHoldersSchemaType = typeof TokenPageTopHoldersInputSchema;
 

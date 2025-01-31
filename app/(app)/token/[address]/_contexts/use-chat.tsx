@@ -17,7 +17,8 @@ import {
     SOLANA_DEPOSIT_LIQUIDITY_NAME,
     SOLANA_WITHDRAW_LIQUIDITY_NAME
 } from '@/ai/action-names';
-import { TokenMetadata } from '@/services/birdeye/types';
+
+import type { TokenChatData } from '@/types';
 
 export enum ColorMode {
     LIGHT = 'light',
@@ -61,11 +62,11 @@ const ChatContext = createContext<ChatContextType>({
 });
 
 interface ChatProviderProps {
-    tokenMetadata: TokenMetadata;
+    token: TokenChatData;
     children: ReactNode;
 }
 
-export const ChatProvider: React.FC<ChatProviderProps> = ({ tokenMetadata, children }) => {
+export const ChatProvider: React.FC<ChatProviderProps> = ({ token, children }) => {
 
     const { user } = usePrivy();
 
@@ -81,12 +82,12 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ tokenMetadata, child
         onResponse: () => {
             setIsResponseLoading(false);
         },
-        api: `/api/chat/token/${tokenMetadata.address}`,
+        api: `/api/chat/token`,
         body: {
             model,
             modelName: model,
             userId: user?.id,
-            tokenMetadata,
+            token,
         },
     });
     

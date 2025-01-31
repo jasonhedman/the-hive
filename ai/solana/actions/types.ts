@@ -6,4 +6,3 @@ export * from './staking/types';
 export * from './token/types';
 export * from './trade/types';
 export * from './wallet/types';
-export * from './token-page/types';

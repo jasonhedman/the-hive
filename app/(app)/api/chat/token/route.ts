@@ -8,19 +8,20 @@ import { xai } from '@ai-sdk/xai';
 import { google } from '@ai-sdk/google';
 import { deepseek } from '@ai-sdk/deepseek';
 
-import { Connection } from "@solana/web3.js";
-
 import { Models } from "@/types/models";
-import { SolanaTokenPageTopHoldersAction, solanaTools } from "@/ai";
-import type { TokenMetadata } from "@/services/birdeye/types";
+import { SolanaTokenPageTopHoldersAction, TokenPageNumMentionsAction, tokenPageTools } from "@/ai";
 
-const system = (tokenMetadata: TokenMetadata) =>
-`You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.symbol}) with the address ${tokenMetadata.address}.`
+import type { TokenChatData } from "@/types";
+
+const system = (tokenMetadata: TokenChatData) =>
+`You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.symbol}) with the address ${tokenMetadata.address}.
+
+The token has ${tokenMetadata.extensions.twitter ? 'a Twitter account linked to it' : 'no Twitter account linked to it'}.`
 
 export const POST = async (req: NextRequest) => {
 
-    const { messages, modelName, tokenMetadata } = await req.json();
-    
+    const { messages, modelName, token }: { messages: any[], modelName: string, token: TokenChatData } = await req.json();
+
     let MAX_TOKENS: number | undefined = undefined;
     let model: LanguageModelV1 | undefined = undefined;
 
@@ -74,11 +75,13 @@ export const POST = async (req: NextRequest) => {
     const streamTextResult = streamText({
         model,
         messages: truncatedMessages,
-        system: system(tokenMetadata),
-        tools: solanaTools(
-            new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!), 
-            [new SolanaTokenPageTopHoldersAction(tokenMetadata.address)]
-        )
+        system: system(token),
+        tools: tokenPageTools(token, [
+            new SolanaTokenPageTopHoldersAction(),
+            ...(token.extensions.twitter ? [
+                new TokenPageNumMentionsAction(token.extensions.twitter.split("/").pop()!)
+            ] : [])
+        ])
     });
 
     return streamTextResult.toDataStreamResponse();

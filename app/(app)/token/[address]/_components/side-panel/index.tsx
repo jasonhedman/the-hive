@@ -10,8 +10,10 @@ import Chat from './chat';
 
 import { ChatProvider } from '../../_contexts';
 
-import { getTokenMetadata } from '@/services/birdeye';
+import { getTokenOverview } from '@/services/birdeye';
 import { getToken } from '@/db/services';
+
+import type { TokenChatData } from '@/types';
 
 interface Props {
     address: string;
@@ -19,8 +21,17 @@ interface Props {
 
 const SidePanel: React.FC<Props> = async ({ address }) => {
 
-    const tokenMetadata = await getTokenMetadata(address);
+    const tokenMetadata = await getTokenOverview(address);
     const token = await getToken(address);
+
+    const tokenChatData: TokenChatData = {
+        address: tokenMetadata.address,
+        name: tokenMetadata.name,
+        symbol: tokenMetadata.symbol,
+        decimals: tokenMetadata.decimals,
+        extensions: tokenMetadata.extensions,
+        logoURI: tokenMetadata.logoURI
+    }
 
     return (
         <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue="chat">
@@ -42,8 +53,8 @@ const SidePanel: React.FC<Props> = async ({ address }) => {
             </TabsList>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
                 <TabsContent value="chat" className="h-full m-0 p-2">
-                    <ChatProvider tokenMetadata={tokenMetadata}>
-                        <Chat token={tokenMetadata} />
+                    <ChatProvider token={tokenChatData}>
+                        <Chat token={tokenChatData} />
                     </ChatProvider>
                 </TabsContent>
                 <TabsContent value="trade" className="h-full m-0 p-2">

@@ -9,10 +9,10 @@ import EmptyChat from './empty'
 
 import { useChat } from '../../../_contexts'
 
-import type { TokenMetadata } from '@/services/birdeye/types'
+import { TokenChatData } from '@/types'
 
 interface Props {
-    token: TokenMetadata
+    token: TokenChatData
 }
 
 const Chat: React.FC<Props> = ({ token }) => {
