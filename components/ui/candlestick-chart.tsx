@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 
 import { createChart, ColorType, IChartApi, Time } from 'lightweight-charts';
 import { useColorMode } from '@/app/_contexts/color-mode';
@@ -15,14 +15,10 @@ interface CandlestickData {
 
 interface CandlestickChartProps {
     data: CandlestickData[];
-    height?: number;
-    width?: number;
 }
 
 export function CandlestickChart({
     data,
-    height = 400,
-    width = 600,
 }: CandlestickChartProps) {
 
     const { mode } = useColorMode();
@@ -39,20 +35,33 @@ export function CandlestickChart({
 
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
-    useEffect(() => {
-        if (!chartContainerRef.current) return;
+    // Update container size
+    useLayoutEffect(() => {
+        const container = chartContainerRef.current;
+        if (!container) return;
 
-        const handleResize = () => {
-            if (chartRef.current) {
-                chartRef.current.applyOptions({ 
-                    width: chartContainerRef.current?.clientWidth || width,
-                    height: height 
-                });
-            }
+        const updateSize = () => {
+            const { clientWidth, clientHeight } = container;
+            setContainerSize({ width: clientWidth, height: clientHeight });
         };
 
-        const chart = createChart(chartContainerRef.current, {
+        // Initial size
+        updateSize();
+
+        const resizeObserver = new ResizeObserver(updateSize);
+        resizeObserver.observe(container);
+
+        return () => resizeObserver.disconnect();
+    }, []);
+
+    // Create and update chart
+    useLayoutEffect(() => {
+        const container = chartContainerRef.current;
+        if (!container || containerSize.width === 0 || containerSize.height === 0) return;
+
+        const chart = createChart(container, {
             layout: {
                 background: { type: ColorType.Solid, color: "transparent" },
                 textColor: colors.textColor,
@@ -61,7 +70,8 @@ export function CandlestickChart({
                 vertLines: { color: colors.lineColor },
                 horzLines: { color: colors.lineColor },
             },
-            width: chartContainerRef.current.clientWidth,
+            width: containerSize.width,
+            height: containerSize.height,
             handleScroll: false,
             handleScale: false,
             rightPriceScale: {
@@ -72,6 +82,7 @@ export function CandlestickChart({
                 visible: false,
             },
         });
+
         chartRef.current = chart;
 
         const candlestickSeries = chart.addCandlestickSeries({
@@ -83,7 +94,6 @@ export function CandlestickChart({
         });
 
         candlestickSeries.setData(data);
-
         candlestickSeries.applyOptions({
             priceFormat: {
                 type: 'price',
@@ -94,21 +104,17 @@ export function CandlestickChart({
 
         chart.timeScale().fitContent();
 
-        window.addEventListener('resize', handleResize);
-
         return () => {
-            window.removeEventListener('resize', handleResize);
-            if (chartRef.current) {
-                chartRef.current.remove();
-            }
+            chart.remove();
+            chartRef.current = null;
         };
-    }, [data, colors, height, width]);
+    }, [containerSize, colors, data]);
 
     return (
         <div 
             ref={chartContainerRef} 
-            className="w-full"
-            style={{ height: `${height}px` }}
+            className="w-full h-full max-h-full overflow-hidden"
+            style={{ position: 'relative', minHeight: '100%', minWidth: '100%', maxWidth: '100%', maxHeight: '100%' }}
         />
     );
 }

@@ -46,10 +46,9 @@ const WINDOWS = [
 
 interface Props {
     mint: string;
-    height?: number;
 }
 
-const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
+const TokenChart: React.FC<Props> = ({ mint }) => {
 
     const [timeframe, setTimeframe] = useState<OHLCVTimeframe>(OHLCVTimeframe.FiveMinutes);
     const [numDays, setNumDays] = useState<number>(1);
@@ -61,7 +60,7 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
     const change = ((price - open) / open) * 100;
 
     return (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col h-full w-full'>
             <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-neutral-700 p-2'>
                 {
                     isLoading ? (
@@ -90,10 +89,10 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
                     }
                 </div>
             </div>
-            <div className='p-2'>
+            <div className='p-2 flex-1 h-0'>
                 {
                     isLoading ? (
-                        <Skeleton style={{ height, width: '100%' }} />
+                        <Skeleton className='h-full w-full' />
                     ) : (
                         <CandlestickChart
                             data={data.map(price => ({
@@ -103,7 +102,6 @@ const TokenChart: React.FC<Props> = ({ mint, height = 400 }) => {
                                 low: price.l,
                                 close: price.c,
                             }))} 
-                            height={height}
                         />
                     )
                 }

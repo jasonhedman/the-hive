@@ -84,13 +84,13 @@ export async function getTokenPageTopHolders(token: TokenChatData, _: TokenPageT
         const avgExchangeHolding = exchange.length > 0 ? exchangeHoldersPercent / exchange.length : 0;
 
         // Generate distribution assessment
-        const concentrationLevel = top10HoldersPercent > 0.5 ? "highly concentrated" : 
-                                 top10HoldersPercent > 0.3 ? "moderately concentrated" : 
-                                 "well distributed";
+        const concentrationLevel = top10HoldersPercent > 0.5 ? "Highly Concentrated" : 
+                                 top10HoldersPercent > 0.3 ? "Moderately Concentrated" : 
+                                 "Well Distributed";
 
-        const exchangePresence = exchangeHoldersPercent > 0.2 ? "significant" :
-                               exchangeHoldersPercent > 0.1 ? "moderate" :
-                               "limited";
+        const exchangePresence = exchangeHoldersPercent > 0.2 ? "Significant" :
+                               exchangeHoldersPercent > 0.1 ? "Moderate" :
+                               "Limited";
 
         return {
             message: `Analysis of token distribution patterns:
@@ -113,7 +113,9 @@ export async function getTokenPageTopHolders(token: TokenChatData, _: TokenPageT
 
 4. Key Metrics:
    - Average top 10 holder owns ${(avgTop10Holding * 100).toFixed(2)}%
-   - Ratio of exchange to vested tokens: ${(exchangeHoldersPercent / (vestedHoldersPercent || 1)).toFixed(2)}x`,
+   - Ratio of exchange to vested tokens: ${(exchangeHoldersPercent / (vestedHoldersPercent || 1)).toFixed(2)}x
+   
+Discuss only the notable metrics unless asked for further details.`,
             body: {
                 top5HoldersPercent,
                 top10HoldersPercent,
