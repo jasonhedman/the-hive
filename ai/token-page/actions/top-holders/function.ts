@@ -65,19 +65,69 @@ export async function getTokenPageTopHolders(token: TokenChatData, _: TokenPageT
             exchange: []
         } as Record<string, { name: string, type: AddressType, percentOfSupply: number }[]>);
 
+        // Calculate basic holder percentages
         const top10HoldersPercent = eoa.slice(0, 10).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
         const top20HoldersPercent = eoa.slice(0, 20).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
-        
         const exchangeHoldersPercent = exchange.reduce((acc, curr) => acc + curr.percentOfSupply, 0);
         const vestedHoldersPercent = vesting.reduce((acc, curr) => acc + curr.percentOfSupply, 0);
 
+        // Calculate concentration metrics
+        const top5HoldersPercent = eoa.slice(0, 5).reduce((acc, curr) => acc + curr.percentOfSupply, 0);
+        const largestHolder = eoa[0]?.percentOfSupply || 0;
+        
+        // Calculate distribution patterns
+        const totalAnalyzedPercent = top20HoldersPercent + exchangeHoldersPercent + vestedHoldersPercent;
+        const remainingSupplyPercent = Math.max(0, 1 - totalAnalyzedPercent);
+        
+        // Calculate average holdings
+        const avgTop10Holding = top10HoldersPercent / Math.min(10, eoa.length);
+        const avgExchangeHolding = exchange.length > 0 ? exchangeHoldersPercent / exchange.length : 0;
+
+        // Generate distribution assessment
+        const concentrationLevel = top10HoldersPercent > 0.5 ? "highly concentrated" : 
+                                 top10HoldersPercent > 0.3 ? "moderately concentrated" : 
+                                 "well distributed";
+
+        const exchangePresence = exchangeHoldersPercent > 0.2 ? "significant" :
+                               exchangeHoldersPercent > 0.1 ? "moderate" :
+                               "limited";
+
         return {
-            message: `This analysis shows the token distribution among the largest holders. The top 10 addresses hold ${(top10HoldersPercent * 100).toFixed(2)}% of the total supply, while expanding to the top 20 addresses accounts for ${(top20HoldersPercent * 100).toFixed(2)}%. Among these top holders, ${(exchangeHoldersPercent * 100).toFixed(2)}% is held by cryptocurrency exchanges (both centralized and decentralized). Additionally, ${(vestedHoldersPercent * 100).toFixed(2)}% is locked in vesting vaults, suggesting structured token release schedules for early investors, team members, or other stakeholders.`,
+            message: `Analysis of token distribution patterns:
+
+1. Concentration Metrics:
+   - The largest single holder controls ${(largestHolder * 100).toFixed(2)}% of the supply
+   - Top 5 holders control ${(top5HoldersPercent * 100).toFixed(2)}%
+   - Top 10 holders control ${(top10HoldersPercent * 100).toFixed(2)}%
+   - Top 20 holders control ${(top20HoldersPercent * 100).toFixed(2)}%
+
+2. Exchange & Vesting Distribution:
+   - ${(exchangeHoldersPercent * 100).toFixed(2)}% is held across ${exchange.length} exchange addresses
+   - ${(vestedHoldersPercent * 100).toFixed(2)}% is locked in vesting contracts
+   - Average exchange holding is ${(avgExchangeHolding * 100).toFixed(2)}%
+
+3. Distribution Assessment:
+   - Token ownership appears ${concentrationLevel}
+   - Exchange presence is ${exchangePresence}
+   - ${(remainingSupplyPercent * 100).toFixed(2)}% is distributed among smaller holders
+
+4. Key Metrics:
+   - Average top 10 holder owns ${(avgTop10Holding * 100).toFixed(2)}%
+   - Ratio of exchange to vested tokens: ${(exchangeHoldersPercent / (vestedHoldersPercent || 1)).toFixed(2)}x`,
             body: {
+                top5HoldersPercent,
                 top10HoldersPercent,
                 top20HoldersPercent,
                 exchangeHoldersPercent,
-                vestedHoldersPercent
+                vestedHoldersPercent,
+                largestHolder,
+                remainingSupplyPercent,
+                avgTop10Holding,
+                avgExchangeHolding,
+                concentrationLevel,
+                exchangePresence,
+                numExchanges: exchange.length,
+                numVestingContracts: vesting.length
             }
         };
     } catch (error) {
