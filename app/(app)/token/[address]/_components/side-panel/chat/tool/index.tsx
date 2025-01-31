@@ -2,9 +2,17 @@
 
 import React from 'react'
 
-import { NumMentions, TopHolders } from './tools';
+import { 
+    LiquidityAnalysis, 
+    NumMentions, 
+    TopHolders 
+} from './tools';
 
-import { SOLANA_TOKEN_PAGE_TOP_HOLDERS_NAME, TOKEN_PAGE_NUM_MENTIONS_NAME } from '@/ai/action-names';
+import { 
+    SOLANA_TOKEN_PAGE_LIQUIDITY_NAME, 
+    SOLANA_TOKEN_PAGE_TOP_HOLDERS_NAME, 
+    TOKEN_PAGE_NUM_MENTIONS_NAME 
+} from '@/ai/action-names';
 
 import type { ToolInvocation } from 'ai'
 
@@ -19,6 +27,8 @@ const Tool: React.FC<Props> = ({ tool }) => {
             return <TopHolders tool={tool} />;
         case TOKEN_PAGE_NUM_MENTIONS_NAME:
             return <NumMentions tool={tool} />;
+        case SOLANA_TOKEN_PAGE_LIQUIDITY_NAME:
+            return <LiquidityAnalysis tool={tool} />;
         default:
             return <pre>{JSON.stringify(tool, null, 2)}</pre>;
     }
