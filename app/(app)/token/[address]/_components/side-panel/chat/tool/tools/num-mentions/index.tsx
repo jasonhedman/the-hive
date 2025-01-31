@@ -12,6 +12,7 @@ interface Props {
 }
 
 const NumMentions: React.FC<Props> = ({ tool }) => {
+    
     return (
         <ToolCard 
             tool={tool}

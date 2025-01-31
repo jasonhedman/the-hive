@@ -19,7 +19,7 @@ const AccountMentions: React.FC<Props> = ({ username }) => {
 
     return (
         <div className="h-full w-full max-h-full flex flex-col md:flex-row gap-2">
-            <div className="md:flex-1 flex flex-col gap-2 h-full max-h-full overflow-y-hidden">
+            <div className="w-full md:w-1/2 flex flex-col gap-2 h-full max-h-full overflow-y-hidden">
                 {isLoading ? <Skeleton className="h-full w-full" /> : (
                     <div className="flex flex-col gap-2 flex-1 h-0 overflow-y-auto no-scrollbar">
                         {tweets.map((tweet) => (
@@ -31,7 +31,7 @@ const AccountMentions: React.FC<Props> = ({ username }) => {
                     </div>
                 )}
             </div>
-            <div className="md:flex-1 md:h-full w-full md:w-fit">
+            <div className="w-full md:w-1/2 flex flex-col gap-2 h-full max-h-full overflow-y-hidden">
                 <h3 className="text-sm font-medium text-center">Mentions Over Time</h3>
                 <MentionsGraph username={username} />
             </div>

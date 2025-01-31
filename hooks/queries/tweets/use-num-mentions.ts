@@ -11,11 +11,8 @@ export const useNumMentions = (username: string) => {
         {
             revalidateOnFocus: false,
             revalidateOnReconnect: false,
-            revalidateOnMount: false,
         }
     );
-
-    console.log(data);
 
     return { data: data ?? null, isLoading, error, mutate };
 }
