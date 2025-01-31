@@ -19,8 +19,6 @@ export async function getTokenPageLiquidity(
         // Find main pool (pool with highest liquidity)
         const mainPool = markets.items.reduce((a: MarketItem, b: MarketItem) => a.liquidity > b.liquidity ? a : b);
 
-        console.log(mainPool.volume24h);
-
         // Get volume metrics from the main pool
         const volumeMetrics = {
             volume24h: mainPool.volume24h,

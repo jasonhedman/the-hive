@@ -14,3 +14,4 @@ export * from './types';
 export * from './top-holders';
 export * from './num-mentions';
 export * from './liquidity';
+export * from './price-analysis';

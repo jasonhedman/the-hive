@@ -110,8 +110,8 @@ interface StatItemProps {
     value: string | number;
     formatter?: (value: number) => string;
     suffix?: string;
-    tooltip?: string;
     className?: string;
+    tooltip?: string;
 }
 
 const StatItem: React.FC<StatItemProps> = ({ 
@@ -119,7 +119,6 @@ const StatItem: React.FC<StatItemProps> = ({
     value, 
     formatter, 
     suffix = '', 
-    tooltip,
     className = ''
 }) => {
     const formattedValue = typeof value === 'number' && formatter 

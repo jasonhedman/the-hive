@@ -77,8 +77,6 @@ const TokenMarkets: React.FC<Props> = ({ address }) => {
 
 export const MarketType = ({ type, address, tokenAddress }: { type: MarketSource, address: string, tokenAddress: string }) => {
 
-    console.log(type, address);
-
     const marketTypeIcons = {
         [MarketSource.Raydium]: "/dexes/raydium.png",
         [MarketSource.RaydiumClamm]: "/dexes/raydium.png",
@@ -87,8 +85,6 @@ export const MarketType = ({ type, address, tokenAddress }: { type: MarketSource
         [MarketSource.Meteora]: "/dexes/meteora.png",
         [MarketSource.Orca]: "/dexes/orca.png",
     } as const;
-
-    console.log(marketTypeIcons[type]);
 
     return (
         <div className="flex flex-row items-center gap-2">

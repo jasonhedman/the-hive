@@ -30,7 +30,9 @@ const SidePanel: React.FC<Props> = async ({ address }) => {
         symbol: tokenMetadata.symbol,
         decimals: tokenMetadata.decimals,
         extensions: tokenMetadata.extensions,
-        logoURI: tokenMetadata.logoURI
+        logoURI: tokenMetadata.logoURI,
+        supply: tokenMetadata.supply,
+        circulatingSupply: tokenMetadata.circulatingSupply
     }
 
     return (

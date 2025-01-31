@@ -9,7 +9,13 @@ import { google } from '@ai-sdk/google';
 import { deepseek } from '@ai-sdk/deepseek';
 
 import { Models } from "@/types/models";
-import { SolanaTokenPageLiquidityAction, SolanaTokenPageTopHoldersAction, TokenPageNumMentionsAction, tokenPageTools } from "@/ai";
+import { 
+    SolanaTokenPageLiquidityAction, 
+    SolanaTokenPagePriceAnalysisAction, 
+    SolanaTokenPageTopHoldersAction, 
+    TokenPageNumMentionsAction, 
+    tokenPageTools 
+} from "@/ai";
 
 import type { TokenChatData } from "@/types";
 
@@ -79,6 +85,7 @@ export const POST = async (req: NextRequest) => {
         tools: tokenPageTools(token, [
             new SolanaTokenPageTopHoldersAction(),
             new SolanaTokenPageLiquidityAction(),
+            new SolanaTokenPagePriceAnalysisAction(),
             ...(token.extensions.twitter ? [
                 new TokenPageNumMentionsAction(token.extensions.twitter.split("/").pop()!)
             ] : [])

@@ -9,11 +9,14 @@ import { useScrollAnchor } from '@/app/(app)/chat/_hooks';
 import { useChat } from '@/app/(app)/token/[address]/_contexts/use-chat';
 import Tool from './tool';
 
+import type { TokenChatData } from '@/types';
+
 interface Props {
     messageClassName?: string;
+    token: TokenChatData;
 }
 
-const Messages: React.FC<Props> = ({ messageClassName }) => {
+const Messages: React.FC<Props> = ({ messageClassName, token }) => {
 
     const { messages, isResponseLoading } = useChat();
 
@@ -44,7 +47,7 @@ const Messages: React.FC<Props> = ({ messageClassName }) => {
                         previousMessage={index > 0 ? messages[index - 1] : undefined} 
                         nextMessage={index < messages.length - 1 ? messages[index + 1] : undefined}
                         compressed={true}
-                        ToolComponent={Tool}
+                        ToolComponent={({ tool }) => <Tool tool={tool} token={token} />}
                     />
                 ))}
                 {isResponseLoading && <LoadingMessage compressed />}

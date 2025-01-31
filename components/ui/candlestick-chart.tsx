@@ -91,16 +91,21 @@ export function CandlestickChart({
             borderVisible: false,
             wickUpColor: colors.wickUpColor,
             wickDownColor: colors.wickDownColor,
-        });
-
-        candlestickSeries.setData(data);
-        candlestickSeries.applyOptions({
             priceFormat: {
                 type: 'price',
-                precision: 4,
+                precision: 5,
                 minMove: 0.00001,
             },
         });
+
+        candlestickSeries.setData(data);
+        // candlestickSeries.applyOptions({
+        //     priceFormat: {
+        //         type: 'price',
+        //         precision: 4,
+        //         minMove: 0.00001,
+        //     },
+        // });
 
         chart.timeScale().fitContent();
 

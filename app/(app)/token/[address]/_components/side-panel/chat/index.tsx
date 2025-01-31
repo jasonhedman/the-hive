@@ -26,7 +26,7 @@ const Chat: React.FC<Props> = ({ token }) => {
                     {
                         messages.length > 0 ? (
                             <>
-                                <Messages />
+                                <Messages token={token} />
                                 <ChatInput />
                             </>
                         ) : (

@@ -6,5 +6,7 @@ export type TokenChatData = Pick<TokenOverview,
   'symbol' | 
   'decimals' | 
   'extensions' |
-  'logoURI'
+  'logoURI' |
+  'supply' |
+  'circulatingSupply'
 >;
