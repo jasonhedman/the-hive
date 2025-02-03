@@ -4,7 +4,8 @@ export enum MarketSource {
     RaydiumCp = "Raydium Cp",
     MeteoraDlmm = "Meteora Dlmm",
     Meteora = "Meteora",
-    Orca = "Orca"
+    Orca = "Orca",
+    Phoenix = "Phoenix"
 }
 
 export interface TokenInfo {

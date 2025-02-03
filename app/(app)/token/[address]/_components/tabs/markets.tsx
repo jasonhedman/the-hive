@@ -84,6 +84,7 @@ export const MarketType = ({ type, address, tokenAddress }: { type: MarketSource
         [MarketSource.MeteoraDlmm]: "/dexes/meteora.png",
         [MarketSource.Meteora]: "/dexes/meteora.png",
         [MarketSource.Orca]: "/dexes/orca.png",
+        [MarketSource.Phoenix]: "/dexes/phoenix.jpg",
     } as const;
 
     return (
@@ -103,6 +104,8 @@ export const MarketType = ({ type, address, tokenAddress }: { type: MarketSource
 
 export const MarketLink = ({ source, address, tokenAddress }: { source: MarketSource, address: string, tokenAddress: string }) => {
 
+    console.log(source, address, tokenAddress);
+
     const marketLinks = {
         [MarketSource.Raydium]: `https://raydium.io/liquidity/increase/?mode=add&pool_id=${address}`,
         [MarketSource.RaydiumClamm]: `https://raydium.io/clmm/create-position/?pool_id=${address}`,
@@ -110,6 +113,7 @@ export const MarketLink = ({ source, address, tokenAddress }: { source: MarketSo
         [MarketSource.MeteoraDlmm]: `https://app.meteora.ag/dlmm/${address}`,
         [MarketSource.Meteora]: `https://app.meteora.ag/pools/${address}`,
         [MarketSource.Orca]: `https://www.orca.so/pools?tokens=${tokenAddress}`,
+        [MarketSource.Phoenix]: `https://app.phoenix.so/pools/${address}`,
     } as const;
 
 
