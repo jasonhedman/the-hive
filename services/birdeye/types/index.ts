@@ -10,3 +10,4 @@ export * from './search';
 export * from './token-overview';
 export * from './token-metadata';
 export * from './token-holders';
+export * from './markets';

@@ -18,6 +18,8 @@ import { useSendTransaction, useTokenBalance } from '@/hooks';
 
 import { getSwapObj, getQuote } from '@/services/jupiter';
 
+import { cn } from '@/lib/utils';
+
 import type { QuoteResponse } from '@jup-ag/api';
 import type { Token } from '@/db/types';
 
@@ -32,6 +34,7 @@ interface Props {
     onSuccess?: (txHash: string) => void,
     onError?: (error: string) => void,
     onCancel?: () => void,
+    className?: string
 }
 
 const Swap: React.FC<Props> = ({ 
@@ -44,7 +47,8 @@ const Swap: React.FC<Props> = ({
     swappingText,
     onSuccess, 
     onError, 
-    onCancel 
+    onCancel,
+    className
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
@@ -109,7 +113,7 @@ const Swap: React.FC<Props> = ({
     }, [inputToken, outputToken, inputAmount]);
     
     return (
-        <div className="flex flex-col gap-4 w-96 max-w-full">
+        <div className={cn("flex flex-col gap-4 w-96 max-w-full", className)}>
             <div className="flex flex-col gap-2 items-center w-full">
                 <TokenInput
                     label={inputLabel}

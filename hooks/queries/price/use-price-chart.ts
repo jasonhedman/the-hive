@@ -2,11 +2,11 @@
 
 import useSWR from 'swr';
 
-import { OHLCVData, OHLCVTimeframe } from '@/services/birdeye/types';
+import { TokenPriceCandlestick, CandlestickGranularity } from '@/services/hellomoon/types';
 
-export const usePriceChart = (mint: string, timeframe: OHLCVTimeframe, numDays: number) => {
+export const usePriceChart = (mint: string, timeframe: CandlestickGranularity, numDays: number) => {
 
-    const { data, isLoading, error, mutate } = useSWR<OHLCVData[]>(
+    const { data, isLoading, error, mutate } = useSWR<TokenPriceCandlestick[]>(
         `/api/token/${mint}/prices/${timeframe}/${numDays}`,
         async () => fetch(`/api/token/${mint}/prices`, {
             method: 'POST',

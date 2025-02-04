@@ -4,3 +4,5 @@ export * from "./use-token-metadata";
 export * from "./use-token-overview";
 export * from "./use-top-holders";
 export * from "./use-top-traders";
+export * from "./use-token-markets";
+export * from "./use-token-users-over-time";
