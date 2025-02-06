@@ -6,9 +6,11 @@ import Link from 'next/link'
 
 import { Card } from '@/components/ui'
 
+import SaveToken from '@/app/(app)/_components/save-token'
+
 import type { SmartMoneyTokenInflow } from '@/services/hellomoon/types'
 import type { Price, TokenMetadata } from '@/services/birdeye/types'
-import SaveToken from '@/app/(app)/_components/save-token'
+
 
 interface Props {
     inflow: SmartMoneyTokenInflow;
@@ -20,13 +22,13 @@ const SmartMoneyToken: React.FC<Props> = ({ inflow, token, price }) => {
 
     return (
         <Link href={`/token/${token.address}`}>
-            <Card className="flex flex-col gap-2 p-2 justify-center hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300">
-                <div className="flex flex-row items-center gap-2 justify-between">
+            <Card className="flex flex-col gap-2 p-2 justify-between h-full">
+                <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center gap-2">
                         <img 
                             src={token.logo_uri} 
                             alt={token.name} 
-                            className="w-10 h-10 rounded-full" 
+                            className="size-8 rounded-full" 
                         />
                         <div className="flex flex-col">
                             <p className="text-sm font-bold">{token.name} ({token.symbol})</p>
@@ -35,8 +37,11 @@ const SmartMoneyToken: React.FC<Props> = ({ inflow, token, price }) => {
                     </div>
                     <SaveToken address={token.address} />
                 </div>
-                <div className="flex flex-col">
-                    <p className="text-xs text-muted-foreground">Net inflow: ${inflow.smartMoneyNetInflow?.toLocaleString()}</p>
+                <div className="flex flex-row items-center gap-2">
+                    
+                    <div className="flex flex-col">
+                        <p className="text-xs text-muted-foreground">Net inflow: ${inflow.smartMoneyNetInflow?.toLocaleString()}</p>
+                    </div>
                 </div>
             </Card>
         </Link>

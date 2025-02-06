@@ -37,6 +37,7 @@ const SmartMoneyInflows: React.FC<Props> = ({ tool, prevToolAgent }) => {
                     :  "No balance found"
             }}
             prevToolAgent={prevToolAgent}
+            className="w-full"
         />
     )
 }
