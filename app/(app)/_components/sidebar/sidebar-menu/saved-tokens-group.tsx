@@ -1,78 +1,58 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
+
+import { ChevronDown, Coins } from 'lucide-react';
 
 import Link from 'next/link';
 
 import { usePrivy } from '@privy-io/react-auth';
 
+import { usePathname } from 'next/navigation';
+
 import { 
     SidebarMenuItem, 
     SidebarMenuButton,
     Skeleton,
-    Icon,
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
     SidebarMenuSub,
     SidebarMenuSubItem,
     SidebarMenuSubButton,
-    useSidebar,
 } from '@/components/ui';
 
-import { useUserChats } from '@/hooks';
+import { useSavedTokens } from '@/hooks';
 
-import { useChat } from '../../../chat/_contexts/chat';
-import { ChevronDown, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-
-const ChatsGroup: React.FC = () => {
+const SavedTokensGroup: React.FC = () => {
 
     const pathname = usePathname();
 
-    const { isMobile, setOpenMobile } = useSidebar();
-
     const { ready, user } = usePrivy();
 
-    const { chats, isLoading } = useUserChats();
-
-    const { setChat, chatId, resetChat } = useChat();
+    const { savedTokens, isLoading } = useSavedTokens();
 
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
             <SidebarMenuItem>
-                <Link href='/chat'>
+                <Link href='/token'>
                     <CollapsibleTrigger 
                         asChild
                     >
                         <SidebarMenuButton 
                             className="justify-between w-full"
-                            isActive={pathname.includes('/chat')}
+                            isActive={pathname.includes('/token')}
                         >
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-2">
-                                    <MessageSquare className="h-4 w-4" />
-                                    <h1 className="text-sm font-semibold">Chats</h1>
+                                    <Coins className="h-4 w-4" />
+                                    <h1 className="text-sm font-semibold">Tokens</h1>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <div 
-                                        onClick={() => {
-                                            resetChat();
-                                            if (isMobile) {
-                                                setOpenMobile(false);
-                                            }
-                                        }}
-                                        className="h-fit w-fit p-1 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-md"
-                                    >
-                                        <Icon name='Plus' />
-                                    </div>
-                                    <ChevronDown 
-                                        className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" 
-                                    />
-                                </div>
+                                <ChevronDown 
+                                    className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" 
+                                />
                             </div>
                         </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -83,32 +63,31 @@ const ChatsGroup: React.FC = () => {
                             isLoading || !ready ? (
                                 <Skeleton className="h-10 w-full" />
                             ) : (
-                                chats.length > 0 ? (
-                                    chats.map((chat) => (
+                                savedTokens.length > 0 ? (
+                                    savedTokens.map((savedToken) => (
                                         <SidebarMenuSubItem
-                                            key={chat.id}
+                                            key={savedToken.id}
                                         >
                                             <SidebarMenuSubButton 
                                                 asChild 
-                                                isActive={chat.id === chatId}
-                                                onClick={() => setChat(chat.id)}
+                                                isActive={pathname.includes(`/token/${savedToken.id}`)}
                                             >
                                                 <Link 
-                                                    href={`/chat`} 
+                                                    href={`/token/${savedToken.id}`} 
                                                 >
-                                                    <span className='truncate'>{chat.tagline}</span>
+                                                    <span className='truncate'>{savedToken.name} ({savedToken.symbol})</span>
                                                 </Link>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
                                     ))
                                 ) : (
                                     user ? (
-                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
-                                            No chats found
+                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2 py-1'>
+                                            No saved tokens
                                         </p>
                                     ) : (
                                         <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
-                                            Sign in to view your chats
+                                            Sign in to view your saved tokens
                                         </p>
                                     )
                                 )
@@ -121,4 +100,4 @@ const ChatsGroup: React.FC = () => {
     )
 }
 
-export default ChatsGroup;
+export default SavedTokensGroup;
