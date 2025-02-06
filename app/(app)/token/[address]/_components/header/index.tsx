@@ -9,6 +9,7 @@ import Address from '@/app/_components/address'
 import Links from './token-links'
 
 import { useTokenOverview } from '@/hooks'
+import SaveToken from '@/app/(app)/_components/save-token'
 
 interface Props {
     address: string
@@ -41,6 +42,7 @@ const Header: React.FC<Props> = ({ address }) => {
                         <Address address={tokenOverview.address} />
                     </div>
                 </div>
+                <SaveToken address={tokenOverview.address} />
             </div>
             <Links extensions={tokenOverview.extensions} />
         </div>

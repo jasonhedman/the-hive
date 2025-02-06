@@ -28,3 +28,5 @@ export * from "./table";
 export * from "./candlestick-chart";
 export * from "./optional-link";
 export * from "./tabs";
+export * from "./scroll-area";
+export * from "./badge";
