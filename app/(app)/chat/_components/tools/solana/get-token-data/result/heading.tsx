@@ -2,17 +2,19 @@
 
 import React from 'react'
 
+import Link from 'next/link'
+
 import { Button, Card } from '@/components/ui'
 
 import Address from '@/app/_components/address'
+
+import SaveToken from '@/app/(app)/_components/save-token'
 
 import Links from './links'
 
 import { cn } from '@/lib/utils'
 
 import type { TokenOverview } from '@/services/birdeye/types'
-import Link from 'next/link'
-import { ArrowUpRightIcon } from 'lucide-react'
 
 
 interface Props {
@@ -33,10 +35,11 @@ const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
                         <h1 className="text-xl font-bold">{token.name} ({token.symbol})</h1>
                         <Address address={token.address} />
                         <Link href={`/token/${token.address}`}>
-                            <Button variant="ghost" className="p-1 h-fit w-fit">
-                                <ArrowUpRightIcon className="w-4 h-4" />
+                            <Button variant="brandOutline" className="p-1 h-6 text-xs w-fit">
+                                See More
                             </Button>
                         </Link>
+                        <SaveToken address={token.address} />
                     </div>
                     <p className="text-sm font-semibold flex items-center gap-1">
                         ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} 
