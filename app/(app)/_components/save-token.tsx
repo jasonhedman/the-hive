@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Loader2, Star } from 'lucide-react'
 
-import { Button, Skeleton } from '@/components/ui'
+import { Skeleton } from '@/components/ui'
 
 import { useSaveToken } from '@/hooks'
 
