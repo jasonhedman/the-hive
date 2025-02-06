@@ -14,6 +14,7 @@ import { useDebounce, useSearchTokens } from '@/hooks';
 
 import type { TokenSearchResult } from '@/services/birdeye/types';
 import Link from 'next/link';
+import SaveToken from '../../_components/save-token';
 
 const SearchBar: React.FC = () => {
 
@@ -54,7 +55,7 @@ const SearchBar: React.FC = () => {
                 />
                 {isFocused && (
                     <div 
-                        className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50 p-2"
+                        className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50"
                         onMouseDown={(e) => e.preventDefault()} // Prevent input blur when clicking dropdown
                     >
                         {isLoading ? (
@@ -76,7 +77,7 @@ const SearchBar: React.FC = () => {
                                             >
                                                 <Button
                                                     variant="ghost"
-                                                    className="w-full justify-start gap-2 px-2 py-1 h-fit"
+                                                    className="w-full justify-start gap-4 px-2 py-1 h-fit"
                                                 >
                                                     <img
                                                         src={token.logo_uri}
@@ -89,13 +90,13 @@ const SearchBar: React.FC = () => {
                                                             ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={token.price_change_24h_percent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price_change_24h_percent > 0 ? '+' : ''}{token.price_change_24h_percent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
                                                         </p>
                                                     </div>
-                                                
+                                                    <SaveToken address={token.address} />
                                                 </Button>
                                             </Link>
                                         ))
                                     )
                                 ) : (
-                                    <p className="text-xs text-muted-foreground">
+                                    <p className="text-xs text-muted-foreground p-2">
                                         Start typing to search for tokens
                                     </p>
                                 )}

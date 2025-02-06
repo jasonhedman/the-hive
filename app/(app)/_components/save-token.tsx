@@ -25,9 +25,7 @@ const SaveToken: React.FC<Props> = ({ address }) => {
     }
 
     return (
-        <Button 
-            variant="ghost" 
-            size="icon" 
+        <div 
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -42,8 +40,10 @@ const SaveToken: React.FC<Props> = ({ address }) => {
                     saveToken();
                 }
             }}
-            disabled={isUpdating}
-            className="h-6 w-6 dark:hover:bg-neutral-700"
+            className={cn(
+                "h-6 w-6 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center", 
+                isUpdating && "pointer-events-none cursor-not-allowed opacity-50"
+            )}
         >
             {
                 isUpdating ? (
@@ -52,7 +52,7 @@ const SaveToken: React.FC<Props> = ({ address }) => {
                     <Star className={cn("size-4", isTokenSaved && "text-brand-600")} />
                 )
             }
-        </Button>
+        </div>
     )
 }
 
