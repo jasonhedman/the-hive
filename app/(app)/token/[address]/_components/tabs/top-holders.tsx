@@ -24,7 +24,7 @@ import { knownAddresses } from "@/lib/known-addresses";
 
 import type { TokenHolder } from "@/services/birdeye/types";
 import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
-import { ArkhamAddress, ArkhamEntity } from "@/services/arkham/types/base-response";
+import { ArkhamAddress } from "@/services/arkham/types/base-response";
 import { arkhamEntityLogos } from "@/lib/arkham-entity-logos";
 
 interface Props {

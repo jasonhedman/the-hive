@@ -1,7 +1,7 @@
-import { getAllTags, getTokenTopFlowByChainAndAddress } from "@/services/arkham";
-import { NextRequest, NextResponse } from "next/server";
+import { getAllTags } from "@/services/arkham";
+import { NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
     const tokenTopFlow = await getAllTags();
 
     return NextResponse.json(tokenTopFlow);

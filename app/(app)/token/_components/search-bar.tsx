@@ -64,7 +64,7 @@ const SearchBar: React.FC = () => {
                             <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
                                 {inputValue ? (
                                     tokens.length === 0 ? (
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-xs text-muted-foreground p-2">
                                             No results for &quot;{inputValue}&quot;
                                         </p>
                                     ) : (
@@ -72,7 +72,7 @@ const SearchBar: React.FC = () => {
                                             <Link
                                                 href={`/token/${token.address}`}
                                                 key={token.address}
-                                                onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                                                onMouseDown={(e) => e.preventDefault()}
                                                 className="h-fit"
                                             >
                                                 <Button
