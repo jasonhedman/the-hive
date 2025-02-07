@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-
 import { Search } from 'lucide-react';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 import {
     Button,
@@ -17,20 +17,28 @@ import Link from 'next/link';
 import SaveToken from '../../_components/save-token';
 
 const SearchBar: React.FC = () => {
-
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const inputRef = useRef<HTMLInputElement>(null);
     const [isFocused, setIsFocused] = useState(false);
-    
     const [inputValue, setInputValue] = useState('');
 
     const debouncedValue = useDebounce(inputValue, 500);
-
     const { data, isLoading, setSearch } = useSearchTokens();
 
-    // Update the search value when debounced value changes
     useEffect(() => {
         setSearch(debouncedValue);
     }, [debouncedValue, setSearch]);
+
+    useEffect(() => {
+        if (searchParams.get('focus') === 'search' && inputRef.current) {
+            inputRef.current.focus();
+            setIsFocused(true);
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('focus');
+            router.replace(`/token?${newParams.toString()}`, { scroll: false });
+        }
+    }, [searchParams, router]);
 
     const tokens = data?.[0]?.result ?? [];
 
@@ -72,7 +80,7 @@ const SearchBar: React.FC = () => {
                                             <Link
                                                 href={`/token/${token.address}`}
                                                 key={token.address}
-                                                onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                                                onMouseDown={(e) => e.preventDefault()}
                                                 className="h-fit"
                                             >
                                                 <Button

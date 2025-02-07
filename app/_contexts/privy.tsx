@@ -2,6 +2,8 @@
 
 import {PrivyProvider as PrivyProviderBase} from '@privy-io/react-auth';
 import {toSolanaWalletConnectors} from '@privy-io/react-auth/solana';
+import '@/components/utils/suppress-console'
+import React from 'react';
 
 interface Props {
     children: React.ReactNode;

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, Star } from 'lucide-react';
 
 import { 
     Button,
@@ -16,6 +16,7 @@ import {
 import { Token } from '@/db/types';
 import { useTokenSearch } from '@/hooks/search';
 import { cn } from '@/lib/utils';
+import { useSaveToken } from '@/hooks';
 
 interface Props {
     value: Token | null,
@@ -30,6 +31,48 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
 
     const { results, loading } = useTokenSearch(input);
     
+    const renderToken = (token: Token) => {
+        const { isTokenSaved, saveToken, deleteToken, isUpdating } = useSaveToken(token.id);
+        
+        return (
+            <Button 
+                key={token.id}
+                variant="ghost"
+                className="w-full justify-start px-1 relative group"
+                onClick={() => {
+                    setOpen(false);
+                    onChange(token);
+                }}
+            >
+                <div 
+                    className="absolute left-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (isUpdating) return;
+                        isTokenSaved ? deleteToken() : saveToken();
+                    }}
+                >
+                    <Star 
+                        className={cn(
+                            "h-4 w-4",
+                            isTokenSaved && "text-brand-600 opacity-100",
+                            isUpdating && "opacity-50"
+                        )} 
+                        fill={isTokenSaved ? "currentColor" : "none"}
+                    />
+                </div>
+                <img 
+                    src={token.logoURI} 
+                    alt={token.name} 
+                    className="w-6 h-6 rounded-full ml-6" 
+                />
+                <p className="text-sm font-bold">
+                    {token.symbol}
+                </p>
+            </Button>
+        );
+    };
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -74,26 +117,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                                             No results for &quot;{input}&quot;
                                         </p>
                                     ) : (
-                                        results.map((token) => (
-                                            <Button 
-                                                key={token.id}
-                                                variant="ghost"
-                                                className="w-full justify-start px-1"
-                                                onClick={() => {
-                                                    setOpen(false);
-                                                    onChange(token);
-                                                }}
-                                            >
-                                                <img 
-                                                    src={token.logoURI} 
-                                                    alt={token.name} 
-                                                    className="w-6 h-6 rounded-full" 
-                                                />
-                                                <p className="text-sm font-bold">
-                                                    {token.symbol}
-                                                </p>
-                                            </Button>
-                                        ))
+                                        results.map(token => renderToken(token))
                                     )
                                 ) : (
                                     <p className="text-xs text-neutral-500">

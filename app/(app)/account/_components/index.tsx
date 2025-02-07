@@ -1,13 +1,10 @@
 'use client'
 
 import React from 'react'
-
+import '@/components/utils/suppress-console'
 import { usePrivy } from '@privy-io/react-auth';
-
 import { Skeleton } from '@/components/ui';
-
 import NotLoggedIn from './not-logged-in';
-
 import AccountHeading from './heading';
 import ConnectedAccounts from './connected-accounts';
 
