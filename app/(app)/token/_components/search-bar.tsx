@@ -55,7 +55,6 @@ const SearchBar: React.FC = () => {
                     ref={inputRef}
                     onFocus={() => setIsFocused(true)}
                     onBlur={(e) => {
-                        // Only blur if we're not clicking inside the dropdown
                         if (!e.relatedTarget?.closest('.search-results')) {
                             setIsFocused(false);
                         }
@@ -64,7 +63,7 @@ const SearchBar: React.FC = () => {
                 {isFocused && (
                     <div 
                         className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50"
-                        onMouseDown={(e) => e.preventDefault()} // Prevent input blur when clicking dropdown
+                        onMouseDown={(e) => e.preventDefault()}
                     >
                         {isLoading ? (
                             <Skeleton className="h-48 w-full" />

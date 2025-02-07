@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Loader2, Star } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 import { Skeleton } from '@/components/ui'
 import { useSaveToken } from '@/hooks'
@@ -14,7 +14,6 @@ interface Props {
 
 const SaveToken: React.FC<Props> = ({ address }) => {
     const pathname = usePathname();
-    const router = useRouter();
     const { saveToken, deleteToken, isLoading, isUpdating, isTokenSaved } = useSaveToken(address);
 
     if(isLoading) {
@@ -33,9 +32,11 @@ const SaveToken: React.FC<Props> = ({ address }) => {
 
         if (isTokenSaved) {
             await deleteToken();
-            // If we're on the tokens page, add focus param to trigger search focus
             if (pathname === '/token') {
-                router.replace('/token?focus=search', { scroll: false });
+                const searchInput = document.querySelector('input[placeholder="Search tokens..."]') as HTMLInputElement;
+                if (searchInput) {
+                    searchInput.focus();
+                }
             }
         } else {
             await saveToken();
