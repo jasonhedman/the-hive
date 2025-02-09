@@ -1,10 +1,14 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
+
 import { ChevronDown, Coins } from 'lucide-react';
-import { usePrivy } from '@privy-io/react-auth';
-import { usePathname, useRouter } from 'next/navigation';
+
 import Link from 'next/link';
+
+import { usePrivy } from '@privy-io/react-auth';
+
+import { usePathname } from 'next/navigation';
 
 import { 
     Badge,
@@ -20,67 +24,88 @@ import {
 } from '@/components/ui';
 
 import { useSavedTokens } from '@/hooks';
-import SaveToken from '@/app/(app)/_components/save-token';
+import SaveToken from '../../save-token';
 
 const SavedTokensGroup: React.FC = () => {
-    const router = useRouter();
+
     const pathname = usePathname();
+
     const { ready, user } = usePrivy();
+
     const { savedTokens, isLoading } = useSavedTokens();
+
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleTokenClick = useCallback((tokenId: string) => {
-        router.push(`/token/${tokenId}`);
-    }, [router]);
-
-    const handleTokensClick = useCallback((e: React.MouseEvent) => {
-        if (e.target === e.currentTarget) {
-            router.push('/token');
-        }
-    }, [router]);
-
-    if (!ready || !user) return null;
-    if (isLoading) return <Skeleton className="h-8 w-full" />;
-
     return (
-        <Collapsible className="group/collapsible w-full" open={isOpen} onOpenChange={setIsOpen}>
-            <CollapsibleTrigger asChild>
-                <SidebarMenuItem className="w-full">
-                    <SidebarMenuButton 
-                        className="w-full"
-                        onClick={handleTokensClick}
+        <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
+            <SidebarMenuItem>
+                <Link href='/token'>
+                    <CollapsibleTrigger 
+                        asChild
                     >
-                        <Coins className="h-4 w-4" />
-                        <span>Tokens</span>
-                        <div className="ml-auto flex items-center gap-2">
-                            {savedTokens.length > 0 && (
-                                <Badge variant="outline">
-                                    {savedTokens.length}
-                                </Badge>
-                            )}
-                            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
-                        </div>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </CollapsibleTrigger>
-            {savedTokens.length > 0 && (
+                        <SidebarMenuButton 
+                            className="justify-between w-full"
+                            isActive={pathname.includes('/token')}
+                        >
+                            <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-2">
+                                    <Coins className="h-4 w-4" />
+                                    <h1 className="text-sm font-semibold">Tokens</h1>
+                                    <Badge variant="brandOutline" className="text-[10px] h-5 w-fit px-1 rounded-md">
+                                        New
+                                    </Badge>
+                                </div>
+                                <ChevronDown 
+                                    className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" 
+                                />
+                            </div>
+                        </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                </Link>
                 <CollapsibleContent>
-                    <SidebarMenuSub>
-                        {savedTokens.map((token) => (
-                            <SidebarMenuSubItem key={token.id}>
-                                <SidebarMenuSubButton
-                                    onClick={() => handleTokenClick(token.id)}
-                                    isActive={pathname === `/token/${token.id}`}
-                                    className="w-full justify-start gap-2 group"
-                                >
-                                    <SaveToken address={token.id} />
-                                    <span className="truncate">{token.symbol}</span>
-                                </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                        ))}
+                    <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
+                        {
+                            isLoading || !ready ? (
+                                <Skeleton className="h-10 w-full" />
+                            ) : (
+                                savedTokens.length > 0 ? (
+                                    savedTokens.map((savedToken) => (
+                                        <SidebarMenuSubItem
+                                            key={savedToken.id}
+                                        >
+                                            <SidebarMenuSubButton 
+                                                asChild 
+                                                isActive={pathname.includes(`/token/${savedToken.id}`)}
+                                            >
+                                                <Link 
+                                                    href={`/token/${savedToken.id}`} 
+                                                    className='w-full flex items-center justify-between'
+                                                >
+                                                    <span className='truncate'>${savedToken.symbol}</span>
+                                                    <SaveToken 
+                                                        address={savedToken.id} 
+                                                        className='hover:bg-neutral-300 dark:hover:bg-neutral-600'
+                                                    />
+                                                </Link>
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+                                    ))
+                                ) : (
+                                    user ? (
+                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2 py-1'>
+                                            No saved tokens
+                                        </p>
+                                    ) : (
+                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
+                                            Sign in to view your saved tokens
+                                        </p>
+                                    )
+                                )
+                            )
+                        }
                     </SidebarMenuSub>
                 </CollapsibleContent>
-            )}
+            </SidebarMenuItem>
         </Collapsible>
     )
 }

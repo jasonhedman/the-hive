@@ -1,19 +1,22 @@
 'use client'
 
 import React from 'react'
+
 import { Loader2, Star } from 'lucide-react'
-import { usePathname } from 'next/navigation'
 
 import { Skeleton } from '@/components/ui'
+
 import { useSaveToken } from '@/hooks'
+
 import { cn } from '@/lib/utils'
 
 interface Props {
     address: string
+    className?: string
 }
 
-const SaveToken: React.FC<Props> = ({ address }) => {
-    const pathname = usePathname();
+const SaveToken: React.FC<Props> = ({ address, className }) => {
+
     const { saveToken, deleteToken, isLoading, isUpdating, isTokenSaved } = useSaveToken(address);
 
     if(isLoading) {
@@ -32,12 +35,6 @@ const SaveToken: React.FC<Props> = ({ address }) => {
 
         if (isTokenSaved) {
             await deleteToken();
-            if (pathname === '/token') {
-                const searchInput = document.querySelector('input[placeholder="Search tokens..."]') as HTMLInputElement;
-                if (searchInput) {
-                    searchInput.focus();
-                }
-            }
         } else {
             await saveToken();
         }
@@ -47,8 +44,9 @@ const SaveToken: React.FC<Props> = ({ address }) => {
         <div 
             onClick={handleClick}
             className={cn(
-                "h-6 w-6 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center", 
-                isUpdating && "pointer-events-none cursor-not-allowed opacity-50"
+                "size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center", 
+                isUpdating && "pointer-events-none cursor-not-allowed opacity-50",
+                className
             )}
         >
             {
