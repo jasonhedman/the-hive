@@ -56,15 +56,15 @@ const Links: React.FC<Props> = ({ token }) => {
             {SOCIAL_LINKS.map((link) => (
                 <OptionalLink 
                     key={link.id}
-                    href={(link.id === "coingeckoId" && token.extensions[link.id]) 
-                        ? `https://www.coingecko.com/en/coins/${token.extensions[link.id]}` 
-                        : token.extensions[link.id]} 
+                    href={(link.id === "coingeckoId" && token?.extensions?.[link.id]) 
+                        ? `https://www.coingecko.com/en/coins/${token.extensions?.[link.id]}` 
+                        : token?.extensions?.[link.id]} 
                     target="_blank"
                 >
                     <div 
                         className={cn(
                             "p-1",
-                            token.extensions[link.id] ? "hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full" : "opacity-25"
+                            token?.extensions?.[link.id] ? "hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full" : "opacity-25"
                         )}
                     >
                         {link.icon}
