@@ -13,9 +13,13 @@ import {
     Skeleton,
 } from '@/components/ui'
 
-import { Token } from '@/db/types';
+import SaveToken from '../(app)/_components/save-token';
+
 import { useTokenSearch } from '@/hooks/search';
+
 import { cn } from '@/lib/utils';
+
+import { Token } from '@/db/types';
 
 interface Props {
     value: Token | null,
@@ -29,7 +33,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
     const [input, setInput] = useState("");
 
     const { results, loading } = useTokenSearch(input);
-    
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -92,6 +96,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                                                 <p className="text-sm font-bold">
                                                     {token.symbol}
                                                 </p>
+                                                <SaveToken address={token.id} />
                                             </Button>
                                         ))
                                     )

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 
+import Link from 'next/link';
+
 import { Search } from 'lucide-react';
 
 import {
@@ -10,24 +12,23 @@ import {
     Skeleton, 
 } from '@/components/ui';
 
+import SaveToken from '../../_components/save-token';
+
 import { useDebounce, useSearchTokens } from '@/hooks';
 
 import type { TokenSearchResult } from '@/services/birdeye/types';
-import Link from 'next/link';
-import SaveToken from '../../_components/save-token';
 
 const SearchBar: React.FC = () => {
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [isFocused, setIsFocused] = useState(false);
     
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const [isFocused, setIsFocused] = useState(false);
     const [inputValue, setInputValue] = useState('');
 
     const debouncedValue = useDebounce(inputValue, 500);
 
     const { data, isLoading, setSearch } = useSearchTokens();
 
-    // Update the search value when debounced value changes
     useEffect(() => {
         setSearch(debouncedValue);
     }, [debouncedValue, setSearch]);
@@ -47,16 +48,16 @@ const SearchBar: React.FC = () => {
                     ref={inputRef}
                     onFocus={() => setIsFocused(true)}
                     onBlur={(e) => {
-                        // Only blur if we're not clicking inside the dropdown
                         if (!e.relatedTarget?.closest('.search-results')) {
                             setIsFocused(false);
                         }
                     }}
+                    autoFocus
                 />
                 {isFocused && (
                     <div 
                         className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50"
-                        onMouseDown={(e) => e.preventDefault()} // Prevent input blur when clicking dropdown
+                        onMouseDown={(e) => e.preventDefault()}
                     >
                         {isLoading ? (
                             <Skeleton className="h-48 w-full" />
@@ -64,7 +65,7 @@ const SearchBar: React.FC = () => {
                             <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
                                 {inputValue ? (
                                     tokens.length === 0 ? (
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-xs text-muted-foreground p-2">
                                             No results for &quot;{inputValue}&quot;
                                         </p>
                                     ) : (
@@ -72,7 +73,7 @@ const SearchBar: React.FC = () => {
                                             <Link
                                                 href={`/token/${token.address}`}
                                                 key={token.address}
-                                                onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                                                onMouseDown={(e) => e.preventDefault()}
                                                 className="h-fit"
                                             >
                                                 <Button

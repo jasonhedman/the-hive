@@ -6,7 +6,7 @@ import { TokenChatData } from "@/types";
 export function getAllTokenPageActions(extensions: TokenChatData['extensions']): TokenPageAction<TokenPageActionSchemaAny, any>[] {
   return [
     new SolanaTokenPageTopHoldersAction(),
-    ...(extensions.twitter ? [new TokenPageNumMentionsAction(extensions.twitter.split("/").pop()!)] : []),
+    ...(extensions?.twitter ? [new TokenPageNumMentionsAction(extensions.twitter.split("/").pop()!)] : []),
   ];
 }
 export * from './types';

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import { CornerDownRight } from 'lucide-react';
 
@@ -27,6 +27,12 @@ const ChatInput: React.FC = () => {
     const { onKeyDown } = useEnterSubmit({ onSubmit: onSubmit })
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
+
+    useEffect(() => {
+        if (!isLoading && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isLoading]);
 
     return (
         <form

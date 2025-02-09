@@ -44,7 +44,11 @@ const Header: React.FC<Props> = ({ address }) => {
                 </div>
                 <SaveToken address={tokenOverview.address} />
             </div>
-            <Links extensions={tokenOverview.extensions} />
+            {
+                tokenOverview.extensions && (
+                    <Links extensions={tokenOverview.extensions} />
+                )
+            }
         </div>
     )
 }

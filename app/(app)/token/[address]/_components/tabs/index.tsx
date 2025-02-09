@@ -59,7 +59,7 @@ const TokenDashboardTabs: React.FC<Props> = async ({ address }) => {
                     Active Wallets
                 </TabsTrigger>
                 {
-                    tokenOverview.extensions.twitter && (
+                    tokenOverview.extensions?.twitter && (
                         <>
                             <TabsTrigger value="tweets">
                                 <FaXTwitter className="w-4 h-4" />
@@ -93,7 +93,7 @@ const TokenDashboardTabs: React.FC<Props> = async ({ address }) => {
                     <TokenUsersOverTime mint={address} />
                 </TabsContent>
                 {
-                    tokenOverview.extensions.twitter && (
+                    tokenOverview.extensions?.twitter && (
                         <>
                             <TabsContent value="tweets" className="h-full m-0 p-2">
                                 <AccountTweets username={tokenOverview.extensions.twitter.split('/').pop()!} />
