@@ -13,7 +13,7 @@ export interface TokenOverview {
     decimals: number;
     symbol: string;
     name: string;
-    extensions: TokenExtensions;
+    extensions: TokenExtensions | null;
     logoURI: string;
 
     // Market overview

@@ -11,10 +11,11 @@ import { useSaveToken } from '@/hooks'
 import { cn } from '@/lib/utils'
 
 interface Props {
-    address: string;
+    address: string
+    className?: string
 }
 
-const SaveToken: React.FC<Props> = ({ address }) => {
+const SaveToken: React.FC<Props> = ({ address, className }) => {
 
     const { saveToken, deleteToken, isLoading, isUpdating, isTokenSaved } = useSaveToken(address);
 
@@ -24,25 +25,28 @@ const SaveToken: React.FC<Props> = ({ address }) => {
         )
     }
 
+    const handleClick = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isUpdating) {
+            return;
+        }
+
+        if (isTokenSaved) {
+            await deleteToken();
+        } else {
+            await saveToken();
+        }
+    }
+
     return (
         <div 
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (isUpdating) {
-                    return;
-                }
-
-                if (isTokenSaved) {
-                    deleteToken();
-                } else {
-                    saveToken();
-                }
-            }}
+            onClick={handleClick}
             className={cn(
-                "h-6 w-6 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center", 
-                isUpdating && "pointer-events-none cursor-not-allowed opacity-50"
+                "size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center", 
+                isUpdating && "pointer-events-none cursor-not-allowed opacity-50",
+                className
             )}
         >
             {

@@ -24,6 +24,7 @@ import {
 } from '@/components/ui';
 
 import { useSavedTokens } from '@/hooks';
+import SaveToken from '../../save-token';
 
 const SavedTokensGroup: React.FC = () => {
 
@@ -78,8 +79,13 @@ const SavedTokensGroup: React.FC = () => {
                                             >
                                                 <Link 
                                                     href={`/token/${savedToken.id}`} 
+                                                    className='w-full flex items-center justify-between'
                                                 >
-                                                    <span className='truncate'>{savedToken.name} ({savedToken.symbol})</span>
+                                                    <span className='truncate'>${savedToken.symbol}</span>
+                                                    <SaveToken 
+                                                        address={savedToken.id} 
+                                                        className='hover:bg-neutral-300 dark:hover:bg-neutral-600'
+                                                    />
                                                 </Link>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>

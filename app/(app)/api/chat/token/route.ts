@@ -22,7 +22,7 @@ import type { TokenChatData } from "@/types";
 const system = (tokenMetadata: TokenChatData) =>
 `You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.symbol}) with the address ${tokenMetadata.address}.
 
-The token has ${tokenMetadata.extensions.twitter ? 'a Twitter account linked to it' : 'no Twitter account linked to it'}.`
+The token has ${tokenMetadata.extensions?.twitter ? 'a Twitter account linked to it' : 'no Twitter account linked to it'}.`
 
 export const POST = async (req: NextRequest) => {
 
@@ -86,7 +86,7 @@ export const POST = async (req: NextRequest) => {
             new SolanaTokenPageTopHoldersAction(),
             new SolanaTokenPageLiquidityAction(),
             new SolanaTokenPagePriceAnalysisAction(),
-            ...(token.extensions.twitter ? [
+            ...(token.extensions?.twitter ? [
                 new TokenPageNumMentionsAction(token.extensions.twitter.split("/").pop()!)
             ] : [])
         ])
