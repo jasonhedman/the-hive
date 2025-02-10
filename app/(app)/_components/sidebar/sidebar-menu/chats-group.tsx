@@ -23,9 +23,10 @@ import {
 import { useUserChats } from '@/hooks';
 
 import { useChat } from '../../../chat/_contexts/chat';
-import { ChevronDown, MessageSquare } from 'lucide-react';
+import { ChevronDown, MessageSquare, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { deleteChat } from '@/db/services';
 
 const ChatsGroup: React.FC = () => {
 
@@ -33,13 +34,35 @@ const ChatsGroup: React.FC = () => {
 
     const { isMobile, setOpenMobile } = useSidebar();
 
-    const { ready, user } = usePrivy();
+    const { ready, user, getAccessToken } = usePrivy();
 
-    const { chats, isLoading } = useUserChats();
+    const { chats, isLoading, mutate } = useUserChats();
 
     const { setChat, chatId, resetChat } = useChat();
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleDelete = async (chatId: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!user) return;
+        
+        try {
+            const response = await fetch(`/api/chats/${chatId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${await getAccessToken()}`,
+                },
+            });
+            
+            if (response.ok) {
+                mutate();
+            }
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+        }
+    };
 
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
@@ -95,8 +118,15 @@ const ChatsGroup: React.FC = () => {
                                             >
                                                 <Link 
                                                     href={`/chat`} 
+                                                    className="flex items-center justify-between w-full"
                                                 >
                                                     <span className='truncate'>{chat.tagline}</span>
+                                                    <div
+                                                        onClick={(e) => handleDelete(chat.id, e)}
+                                                        className="size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                                                    >
+                                                        <Trash2 className="size-4 text-red-600" />
+                                                    </div>
                                                 </Link>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
