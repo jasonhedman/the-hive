@@ -110,6 +110,7 @@ const ChatsGroup: React.FC = () => {
                                     chats.map((chat) => (
                                         <SidebarMenuSubItem
                                             key={chat.id}
+                                            className="group/chat"
                                         >
                                             <SidebarMenuSubButton 
                                                 asChild 
@@ -123,7 +124,7 @@ const ChatsGroup: React.FC = () => {
                                                     <span className='truncate'>{chat.tagline}</span>
                                                     <div
                                                         onClick={(e) => handleDelete(chat.id, e)}
-                                                        className="size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                                                        className="size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100"
                                                     >
                                                         <Trash2 className="size-4 text-red-600" />
                                                     </div>
