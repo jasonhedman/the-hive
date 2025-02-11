@@ -53,7 +53,7 @@ const TradesTable = ({ body }: { body: GetTraderTradesResultBodyType }) => {
                             <TableCell className="">
                                 <div className="flex flex-row items-center justify-center gap-2">
                                     <img
-                                        src={trade.token.logoURI || '/placeholder.png'}
+                                        src={trade.token.logoURI}
                                         alt={trade.token.symbol}
                                         width={24}
                                         height={24}
@@ -66,33 +66,33 @@ const TradesTable = ({ body }: { body: GetTraderTradesResultBodyType }) => {
                             <TableCell>
                                 <div className="flex flex-col w-full gap-1">
                                     <div className="flex justify-between text-xs">
-                                        <span className="text-green-500">
-                                            {((trade.volume.buy / (trade.volume.buy + trade.volume.sell)) * 100).toFixed(2)}%
-                                        </span>
                                         <span className="text-red-500">
                                             {((trade.volume.sell / (trade.volume.buy + trade.volume.sell)) * 100).toFixed(2)}%
                                         </span>
+                                        <span className="text-green-500">
+                                            {((trade.volume.buy / (trade.volume.buy + trade.volume.sell)) * 100).toFixed(2)}%
+                                        </span>
                                     </div>
                                     <div className="flex w-full h-1 bg-neutral-800 rounded-full overflow-hidden">
-                                        <div 
-                                            className="bg-green-500 h-full"
-                                            style={{ 
-                                                width: `${(trade.volume.buy / (trade.volume.buy + trade.volume.sell)) * 100}%`
-                                            }}
-                                        />
                                         <div 
                                             className="bg-red-500 h-full"
                                             style={{ 
                                                 width: `${(trade.volume.sell / (trade.volume.buy + trade.volume.sell)) * 100}%`
                                             }}
                                         />
+                                        <div 
+                                            className="bg-green-500 h-full"
+                                            style={{ 
+                                                width: `${(trade.volume.buy / (trade.volume.buy + trade.volume.sell)) * 100}%`
+                                            }}
+                                        />
                                     </div>
                                     <div className="flex justify-between text-xs">
-                                        <span className="text-green-500">
-                                            {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(trade.volume.buy)}
-                                        </span>
                                         <span className="text-red-500">
                                             {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(trade.volume.sell)}
+                                        </span>
+                                        <span className="text-green-500">
+                                            {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(trade.volume.buy)}
                                         </span>
                                     </div>
                                 </div>

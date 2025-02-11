@@ -34,36 +34,32 @@ interface Props {
     onSuccess?: (txHash: string) => void,
     onError?: (error: string) => void,
     onCancel?: () => void,
-    className?: string
+    className?: string,
+    priorityTokens?: string[]
 }
 
 const Swap: React.FC<Props> = ({ 
     initialInputToken, 
     initialOutputToken, 
-    inputLabel, 
-    outputLabel, 
     initialInputAmount, 
     swapText, 
     swappingText,
     onSuccess, 
     onError, 
     onCancel,
-    className
+    className,
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<Token | null>(initialInputToken);
-
+    const [inputToken, setInputToken] = useState<Token | null>(null);
     const [outputAmount, setOutputAmount] = useState<string>("");
-    const [outputToken, setOutputToken] = useState<Token | null>(initialOutputToken);
+    const [outputToken, setOutputToken] = useState<Token | null>(initialInputToken);
 
     const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
     const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
-
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
     const { sendTransaction, wallet } = useSendTransaction();
-
     const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.id || "", wallet?.address || "");
 
     const onChangeInputOutput = () => {
@@ -111,17 +107,22 @@ const Swap: React.FC<Props> = ({
             }
         }
     }, [inputToken, outputToken, inputAmount]);
-    
+
     return (
         <div className={cn("flex flex-col gap-4 w-96 max-w-full", className)}>
             <div className="flex flex-col gap-2 items-center w-full">
                 <TokenInput
-                    label={inputLabel}
+                    label="Sell"
                     amount={inputAmount}
                     onChange={setInputAmount}
                     token={inputToken}
                     onChangeToken={setInputToken}
                     address={wallet?.address}
+                    priorityTokens={[
+                        'So11111111111111111111111111111111111111112', // SOL
+                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+                    ]}
                 />
                 <Button 
                     variant="ghost" 
@@ -132,11 +133,16 @@ const Swap: React.FC<Props> = ({
                     <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                 </Button>
                 <TokenInput
-                    label={outputLabel}
+                    label="Buy"
                     amount={outputAmount}
                     token={outputToken}
                     onChangeToken={setOutputToken}
                     address={wallet?.address}
+                    priorityTokens={[
+                        'So11111111111111111111111111111111111111112', // SOL
+                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+                    ]}
                 />
             </div>
             <Separator />
