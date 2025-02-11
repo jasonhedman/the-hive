@@ -1,8 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { useState} from 'react'
+
+import { ChevronDown, Loader2, MessageSquare, Trash2 } from 'lucide-react';
 
 import Link from 'next/link';
+
+import { usePathname } from 'next/navigation';
 
 import { usePrivy } from '@privy-io/react-auth';
 
@@ -23,10 +27,8 @@ import {
 import { useUserChats } from '@/hooks';
 
 import { useChat } from '../../../chat/_contexts/chat';
-import { ChevronDown, MessageSquare, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { deleteChat } from '@/db/services';
+
+import { cn } from '@/lib/utils';
 
 const ChatsGroup: React.FC = () => {
 
@@ -42,11 +44,15 @@ const ChatsGroup: React.FC = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
+
     const handleDelete = async (chatId: string, e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         
-        if (!user) return;
+        if (!user || deletingChatId) return;
+
+        setDeletingChatId(chatId);
         
         try {
             const response = await fetch(`/api/chats/${chatId}`, {
@@ -57,10 +63,12 @@ const ChatsGroup: React.FC = () => {
             });
             
             if (response.ok) {
-                mutate();
+                mutate(chats.filter((chat) => chat.id !== chatId));
             }
         } catch (error) {
             console.error('Error deleting chat:', error);
+        } finally {
+            setDeletingChatId(null);
         }
     };
 
@@ -124,9 +132,16 @@ const ChatsGroup: React.FC = () => {
                                                     <span className='truncate'>{chat.tagline}</span>
                                                     <div
                                                         onClick={(e) => handleDelete(chat.id, e)}
-                                                        className="size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100"
+                                                        className={cn(
+                                                            "size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100",
+                                                            deletingChatId === chat.id && "opacity-50 pointer-events-none"
+                                                        )}
                                                     >
-                                                        <Trash2 className="size-4 text-red-600" />
+                                                        {deletingChatId === chat.id ? (
+                                                            <Loader2 className="size-4 animate-spin" />
+                                                        ) : (
+                                                            <Trash2 className="size-4 text-red-600" />
+                                                        )}
                                                     </div>
                                                 </Link>
                                             </SidebarMenuSubButton>
