@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { addChat, getChat, updateChatMessages } from "@/db/services";
+import { addChat, getChat, updateChatMessages, deleteChat } from "@/db/services";
 
 import { privy } from "@/services/privy";
 import { generateText } from "ai";
@@ -84,6 +84,47 @@ export const POST = async (req: NextRequest, { params }: { params: Promise<{ cha
         return NextResponse.json(false, { status: 500 });
     }
 }
+
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) => {
+    const { chatId } = await params;
+
+    try {
+        const authHeader = req.headers.get("authorization");
+        if (!authHeader?.startsWith("Bearer ")) {
+            return NextResponse.json(
+                { error: "Missing or invalid authorization header" },
+                { status: 401 }
+            );
+        }
+
+        const token = authHeader.split(" ")[1];
+        const { userId } = await privy.verifyAuthToken(token);
+        
+        if (!userId) {
+            return NextResponse.json(
+                { error: "Invalid token" },
+                { status: 401 }
+            );
+        }
+
+        const success = await deleteChat(chatId, userId);
+        
+        if (success) {
+            return NextResponse.json({ success: true });
+        } else {
+            return NextResponse.json(
+                { error: "Failed to delete chat" },
+                { status: 500 }
+            );
+        }
+    } catch (error) {
+        console.error("Error in DELETE /api/chats/[chatId]:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+};
 
 const generateTagline = async (messages: Omit<Message, "id">[]) => {
     const { text } = await generateText({

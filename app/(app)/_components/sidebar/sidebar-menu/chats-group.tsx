@@ -1,8 +1,12 @@
 'use client'
 
-import React from 'react'
+import React, { useState} from 'react'
+
+import { ChevronDown, Loader2, MessageSquare, Trash2 } from 'lucide-react';
 
 import Link from 'next/link';
+
+import { usePathname } from 'next/navigation';
 
 import { usePrivy } from '@privy-io/react-auth';
 
@@ -23,9 +27,8 @@ import {
 import { useUserChats } from '@/hooks';
 
 import { useChat } from '../../../chat/_contexts/chat';
-import { ChevronDown, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+
+import { cn } from '@/lib/utils';
 
 const ChatsGroup: React.FC = () => {
 
@@ -33,13 +36,41 @@ const ChatsGroup: React.FC = () => {
 
     const { isMobile, setOpenMobile } = useSidebar();
 
-    const { ready, user } = usePrivy();
+    const { ready, user, getAccessToken } = usePrivy();
 
-    const { chats, isLoading } = useUserChats();
+    const { chats, isLoading, mutate } = useUserChats();
 
     const { setChat, chatId, resetChat } = useChat();
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
+
+    const handleDelete = async (chatId: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!user || deletingChatId) return;
+
+        setDeletingChatId(chatId);
+        
+        try {
+            const response = await fetch(`/api/chats/${chatId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${await getAccessToken()}`,
+                },
+            });
+            
+            if (response.ok) {
+                mutate(chats.filter((chat) => chat.id !== chatId));
+            }
+        } catch (error) {
+            console.error('Error deleting chat:', error);
+        } finally {
+            setDeletingChatId(null);
+        }
+    };
 
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
@@ -87,6 +118,7 @@ const ChatsGroup: React.FC = () => {
                                     chats.map((chat) => (
                                         <SidebarMenuSubItem
                                             key={chat.id}
+                                            className="group/chat"
                                         >
                                             <SidebarMenuSubButton 
                                                 asChild 
@@ -95,8 +127,22 @@ const ChatsGroup: React.FC = () => {
                                             >
                                                 <Link 
                                                     href={`/chat`} 
+                                                    className="flex items-center justify-between w-full"
                                                 >
                                                     <span className='truncate'>{chat.tagline}</span>
+                                                    <div
+                                                        onClick={(e) => handleDelete(chat.id, e)}
+                                                        className={cn(
+                                                            "size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100",
+                                                            deletingChatId === chat.id && "opacity-50 pointer-events-none"
+                                                        )}
+                                                    >
+                                                        {deletingChatId === chat.id ? (
+                                                            <Loader2 className="size-4 animate-spin" />
+                                                        ) : (
+                                                            <Trash2 className="size-4 text-red-600" />
+                                                        )}
+                                                    </div>
                                                 </Link>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>
