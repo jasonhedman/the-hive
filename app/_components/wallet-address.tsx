@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+import Image from 'next/image';
 
 import Link from 'next/link';
 
@@ -14,12 +16,30 @@ import { usePortfolio } from '@/hooks';
 
 import { cn } from '@/lib/utils';
 
+import { ArkhamAddress } from '@/services/arkham/types/base-response';
+import { arkhamEntityLogos } from '@/lib/arkham-entity-logos';
+
 interface Props {
     address: string;
     className?: string;
 }
 
 const WalletAddress: React.FC<Props> = ({ address, className }) => {
+
+    const [arkhamAddress, setArkhamAddress] = useState<ArkhamAddress | null>(null);
+
+    useEffect(() => {
+        const fetchArkhamEntity = async () => {
+            try {
+                const entity = await fetch(`/api/arkham/address/${address}`)
+                const data = await entity.json();
+                setArkhamAddress(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchArkhamEntity();
+    }, [address]);
     
     const [copied, setCopied] = useState(false);
 
@@ -33,11 +53,34 @@ const WalletAddress: React.FC<Props> = ({ address, className }) => {
         <TooltipProvider>
             <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
-                    <p 
-                        className={cn("text-sm text-muted-foreground cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md w-fit px-1", className)}
-                    >
-                        {`${address.slice(0, 4)}...${address.slice(-4)}`}
-                    </p>
+                    {
+                        (arkhamAddress?.arkhamEntity && arkhamAddress?.arkhamLabel?.name) ? (
+                            <div className="flex flex-row items-center gap-2">
+                                {
+                                    arkhamEntityLogos[arkhamAddress.arkhamEntity.id as keyof typeof arkhamEntityLogos] && (
+                                        <Image
+                                            src={arkhamEntityLogos[arkhamAddress.arkhamEntity.id as keyof typeof arkhamEntityLogos]}
+                                            alt={arkhamAddress.arkhamEntity.name}
+                                            width={16}
+                                            height={16}
+                                            className="rounded-full"
+                                        />
+                                    )
+                                }
+                                <p
+                                    className={cn("text-sm text-muted-foreground cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md w-fit px-1", className)}
+                                >
+                                    {`${arkhamAddress.arkhamEntity.name} (${arkhamAddress.arkhamLabel.name})`}
+                                </p>
+                            </div>
+                        ) : (
+                            <p 
+                                className={cn("text-sm text-muted-foreground cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md w-fit px-1", className)}
+                            >
+                                {address.slice(0, 4)}...${address.slice(-4)}
+                            </p>
+                        )
+                    }
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="flex flex-col gap-4">
                     <WalletBalances address={address} />

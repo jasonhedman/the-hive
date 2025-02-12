@@ -18,12 +18,13 @@ import WalletAddress from "@/app/_components/wallet-address";
 
 import { Connection, PublicKey } from "@solana/web3.js";
 
+import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
+
 import { getStreamsByMint } from "@/services/streamflow";
 
 import { knownAddresses } from "@/lib/known-addresses";
 
 import type { TokenHolder } from "@/services/birdeye/types";
-import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
 
 interface Props {
     mint: string;
@@ -34,7 +35,7 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
     const { data: topHolders, isLoading } = useTopHolders(mint);
 
     const [totalSupply, setTotalSupply] = useState<number>(0);
-    const [knownAddressesWithStreamflow, setKnownAddressesWithStreamflow] = useState<Record<string, { name: string, logo: string }>>(knownAddresses);
+    const [streamflowAddresses, setStreamflowAddresses] = useState<Record<string, { name: string, logo: string }>>(knownAddresses);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -44,16 +45,13 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
 
             const streamflowAccounts = await getStreamsByMint(mint);
             
-            setKnownAddressesWithStreamflow({
-                ...knownAddresses,
-                ...streamflowAccounts.reduce((acc, account) => {
-                    acc[account.account.escrowTokens] = {
-                        name: "Streamflow Vault",
-                        logo: "/vesting/streamflow.png"
-                    }
-                    return acc;
-                }, {} as Record<string, { name: string, logo: string }>)
-            });
+            setStreamflowAddresses(streamflowAccounts.reduce((acc, account) => {
+                acc[account.account.escrowTokens] = {
+                    name: "Streamflow Vault",
+                    logo: "/vesting/streamflow.png"
+                }
+                return acc;
+            }, {} as Record<string, { name: string, logo: string }>));
         };
 
         fetchData();
@@ -79,7 +77,7 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
                         topHolder={topHolder}
                         percentageOwned={topHolder.ui_amount / totalSupply * 100}
                         index={index}
-                        knownAddresses={knownAddressesWithStreamflow}
+                        knownAddresses={streamflowAddresses}
                     />
                 ))}
             </TableBody>

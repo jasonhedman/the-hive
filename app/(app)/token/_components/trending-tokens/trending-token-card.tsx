@@ -12,6 +12,7 @@ interface Props {
 }
 
 const TrendingTokenCard: React.FC<Props> = ({ token }) => {
+    
     return (
         <Link href={`/token/${token.address}`}>
             <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">
