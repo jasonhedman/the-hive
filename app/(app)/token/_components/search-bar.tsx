@@ -50,17 +50,11 @@ const SearchBar: React.FC = () => {
                 return Array.from(priorityAddresses).indexOf(a.address) - Array.from(priorityAddresses).indexOf(b.address);
             }
             
-            // For other tokens, sort by volume
-            return (b.volume_24h_usd || 0) - (a.volume_24h_usd || 0);
+            return 0;
         });
     };
 
-    const sortedResults = data?.[0]?.result 
-        ? { 
-            ...data[0],
-            result: sortTokens(data[0].result)
-        } 
-        : data[0];
+    const sortedResults = sortTokens(tokens);
 
     return (
         <div className="flex flex-col gap-2">
@@ -91,12 +85,12 @@ const SearchBar: React.FC = () => {
                         ) : (
                             <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
                                 {inputValue ? (
-                                    sortedResults?.result.length === 0 ? (
+                                    sortedResults.length === 0 ? (
                                         <p className="text-xs text-muted-foreground p-2">
                                             No results for &quot;{inputValue}&quot;
                                         </p>
                                     ) : (
-                                        sortedResults?.result.map((token: TokenSearchResult) => (
+                                        sortedResults.map((token: TokenSearchResult) => (
                                             <Link
                                                 href={`/token/${token.address}`}
                                                 key={token.address}

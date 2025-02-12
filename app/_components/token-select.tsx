@@ -46,17 +46,9 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
             if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
             if (aIndex !== -1) return -1;
             if (bIndex !== -1) return 1;
-            
-            // If searching, prioritize exact matches
-            if (input) {
-                const aSymbolMatch = a.symbol.toLowerCase() === input.toLowerCase();
-                const bSymbolMatch = b.symbol.toLowerCase() === input.toLowerCase();
-                if (aSymbolMatch && !bSymbolMatch) return -1;
-                if (!aSymbolMatch && bSymbolMatch) return 1;
-            }
-            
-            // Alphabetical sort by symbol
-            return a.symbol.localeCompare(b.symbol);
+
+            // keep order
+            return 0;
         });
     }, [results, priorityTokens, input]);
 

@@ -48,12 +48,14 @@ const Swap: React.FC<Props> = ({
     onError, 
     onCancel,
     className,
+    inputLabel,
+    outputLabel,
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<Token | null>(null);
+    const [inputToken, setInputToken] = useState<Token | null>(initialInputToken);
     const [outputAmount, setOutputAmount] = useState<string>("");
-    const [outputToken, setOutputToken] = useState<Token | null>(initialInputToken);
+    const [outputToken, setOutputToken] = useState<Token | null>(initialOutputToken);
 
     const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
     const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
@@ -112,7 +114,7 @@ const Swap: React.FC<Props> = ({
         <div className={cn("flex flex-col gap-4 w-96 max-w-full", className)}>
             <div className="flex flex-col gap-2 items-center w-full">
                 <TokenInput
-                    label="Sell"
+                    label={inputLabel}
                     amount={inputAmount}
                     onChange={setInputAmount}
                     token={inputToken}
@@ -133,7 +135,7 @@ const Swap: React.FC<Props> = ({
                     <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                 </Button>
                 <TokenInput
-                    label="Buy"
+                    label={outputLabel}
                     amount={outputAmount}
                     token={outputToken}
                     onChangeToken={setOutputToken}
