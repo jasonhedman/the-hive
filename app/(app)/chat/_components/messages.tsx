@@ -41,7 +41,6 @@ const Messages: React.FC<Props> = ({ messages, messageClassName }) => {
                             previousMessage={index > 0 ? messages[index - 1] : undefined} 
                             nextMessage={index < messages.length - 1 ? messages[index + 1] : undefined} 
                         />
-                        {/* Only show suggestions for the last assistant message */}
                         {index === lastAssistantIndex && (
                             <FollowUpSuggestions 
                                 messageId={message.id}
