@@ -18,14 +18,13 @@ import WalletAddress from "@/app/_components/wallet-address";
 
 import { Connection, PublicKey } from "@solana/web3.js";
 
+import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
+
 import { getStreamsByMint } from "@/services/streamflow";
 
 import { knownAddresses } from "@/lib/known-addresses";
 
 import type { TokenHolder } from "@/services/birdeye/types";
-import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
-import { ArkhamAddress } from "@/services/arkham/types/base-response";
-import { arkhamEntityLogos } from "@/lib/arkham-entity-logos";
 
 interface Props {
     mint: string;
@@ -37,7 +36,6 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
 
     const [totalSupply, setTotalSupply] = useState<number>(0);
     const [streamflowAddresses, setStreamflowAddresses] = useState<Record<string, { name: string, logo: string }>>(knownAddresses);
-    const [arkhamAddresses, setArkhamAddresses] = useState<Record<string, { name: string, logo: string }>>({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,31 +57,6 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
         fetchData();
     }, [mint]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if(topHolders.length > 0) {
-                const arkhamAddresses = await Promise.all(topHolders.map(async (topHolder) => {
-                    console.log(topHolder.owner);
-                    const arkhamEntity = await fetch(`/api/arkham/address/${topHolder.owner}`);
-                    return await arkhamEntity.json() as ArkhamAddress;
-                }));
-
-                setArkhamAddresses(arkhamAddresses.reduce((acc, address) => {
-                    if(address.arkhamEntity && address.arkhamLabel) {
-                        acc[address.address] = {
-                            name: `${address.arkhamEntity.name} (${address.arkhamLabel.name})`,
-                            logo: arkhamEntityLogos[address.arkhamEntity.id as keyof typeof arkhamEntityLogos] || "/logo.png"
-                        }
-                    }
-                    return acc;
-                }, {} as Record<string, { name: string, logo: string }>));
-            }
-        };
-        fetchData();
-    }, [mint, topHolders]);
-
-    console.log(arkhamAddresses);
-
     if(isLoading) {
         return <Skeleton className="h-full w-full" />
     }
@@ -104,10 +77,7 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
                         topHolder={topHolder}
                         percentageOwned={topHolder.ui_amount / totalSupply * 100}
                         index={index}
-                        knownAddresses={{
-                            ...streamflowAddresses,
-                            ...arkhamAddresses
-                        }}
+                        knownAddresses={streamflowAddresses}
                     />
                 ))}
             </TableBody>

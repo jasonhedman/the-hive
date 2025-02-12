@@ -10,8 +10,6 @@ import ToolCard from '../tool-card';
 
 import { getStreamsByMint } from '@/services/streamflow';
 
-import { knownAddresses } from '@/lib/known-addresses';
-
 import type { ToolInvocation } from 'ai';
 import type { TopHoldersResultBodyType, TopHoldersResultType } from '@/ai';
 import type { TokenLargestAccount } from '@/services/helius';
@@ -58,16 +56,13 @@ const TopHolders = ({ body, mint }: { body: TopHoldersResultBodyType, mint: stri
         fetchStreamflowAccounts();
     }, [mint]);
 
-    const knownAddressesWithStreamflow = {
-        ...knownAddresses,
-        ...streamflowAccounts.reduce((acc, account) => {
-            acc[account.account.escrowTokens] = {
-                name: "Streamflow Vault",
-                logo: "/vesting/streamflow.png"
-            }
-            return acc;
-        }, {} as Record<string, { name: string, logo: string }>)
-    }
+    const knownAddressesWithStreamflow = streamflowAccounts.reduce((acc, account) => {
+        acc[account.account.escrowTokens] = {
+            name: "Streamflow Vault",
+            logo: "/vesting/streamflow.png"
+        }
+        return acc;
+    }, {} as Record<string, { name: string, logo: string }>)
 
     return (
         <div className="flex flex-col gap-2">
@@ -119,7 +114,8 @@ const TopHolder = ({ topHolder, index, knownAddresses }: { topHolder: (TokenLarg
                             address={topHolder.owner} 
                             className="text-sm font-bold"
                         />
-                )}
+                    )
+                }
                 <p className="text-xs">{topHolder.uiAmount.toLocaleString()} ({topHolder.percentageOwned.toFixed(2)}%)</p>
             </div>
         </Card>

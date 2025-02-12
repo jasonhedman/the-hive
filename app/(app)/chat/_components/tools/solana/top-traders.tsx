@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 
-import Image from 'next/image';
-
 import { Button, Card, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui';
 
 import WalletAddress from '@/app/_components/wallet-address';
 
 import ToolCard from '../tool-card';
-
-import { knownAddresses } from '@/lib/known-addresses';
 
 import type { ToolInvocation } from 'ai';
 import type { GetTopTradersResultBodyType, GetTopTradersResultType } from '@/ai';
@@ -58,24 +54,10 @@ const TopTraders = ({ body }: { body: GetTopTradersResultBodyType }) => {
                         <TableRow key={trader.address}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell className="flex flex-col items-center">
-                                {knownAddresses[trader.address] ? (
-                                    <div className="flex flex-row items-center gap-2">
-                                        <Image
-                                            src={knownAddresses[trader.address].logo}
-                                            alt={knownAddresses[trader.address].name}
-                                            width={16}
-                                            height={16}
-                                        />
-                                        <span className="font-medium">
-                                            {knownAddresses[trader.address].name}
-                                        </span>
-                                    </div>
-                                ) : (
-                                    <WalletAddress 
-                                        address={trader.address} 
-                                        className="font-medium"
-                                    />
-                                )}
+                                <WalletAddress 
+                                    address={trader.address} 
+                                    className="font-medium"
+                                />
                             </TableCell>
                             <TableCell className="text-green-500">
                                 ${trader.pnl.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
