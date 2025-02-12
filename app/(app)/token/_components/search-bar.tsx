@@ -35,6 +35,27 @@ const SearchBar: React.FC = () => {
 
     const tokens = data?.[0]?.result ?? [];
 
+    const sortTokens = (tokens: TokenSearchResult[]) => {
+        const priorityAddresses = new Set([
+            'So11111111111111111111111111111111111111112', // SOL
+            'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+            'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+        ]);
+
+        return tokens.sort((a, b) => {
+            if (priorityAddresses.has(a.address) && !priorityAddresses.has(b.address)) return -1;
+            if (!priorityAddresses.has(a.address) && priorityAddresses.has(b.address)) return 1;
+            
+            if (priorityAddresses.has(a.address) && priorityAddresses.has(b.address)) {
+                return Array.from(priorityAddresses).indexOf(a.address) - Array.from(priorityAddresses).indexOf(b.address);
+            }
+            
+            return 0;
+        });
+    };
+
+    const sortedResults = sortTokens(tokens);
+
     return (
         <div className="flex flex-col gap-2">
             <h2 className="text-lg font-bold">Search</h2>
@@ -64,12 +85,12 @@ const SearchBar: React.FC = () => {
                         ) : (
                             <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
                                 {inputValue ? (
-                                    tokens.length === 0 ? (
+                                    sortedResults.length === 0 ? (
                                         <p className="text-xs text-muted-foreground p-2">
                                             No results for &quot;{inputValue}&quot;
                                         </p>
                                     ) : (
-                                        tokens.map((token: TokenSearchResult) => (
+                                        sortedResults.map((token: TokenSearchResult) => (
                                             <Link
                                                 href={`/token/${token.address}`}
                                                 key={token.address}

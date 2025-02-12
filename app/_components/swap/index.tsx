@@ -34,36 +34,34 @@ interface Props {
     onSuccess?: (txHash: string) => void,
     onError?: (error: string) => void,
     onCancel?: () => void,
-    className?: string
+    className?: string,
+    priorityTokens?: string[]
 }
 
 const Swap: React.FC<Props> = ({ 
     initialInputToken, 
     initialOutputToken, 
-    inputLabel, 
-    outputLabel, 
     initialInputAmount, 
     swapText, 
     swappingText,
     onSuccess, 
     onError, 
     onCancel,
-    className
+    className,
+    inputLabel,
+    outputLabel,
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
     const [inputToken, setInputToken] = useState<Token | null>(initialInputToken);
-
     const [outputAmount, setOutputAmount] = useState<string>("");
     const [outputToken, setOutputToken] = useState<Token | null>(initialOutputToken);
 
     const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
     const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
-
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
     const { sendTransaction, wallet } = useSendTransaction();
-
     const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.id || "", wallet?.address || "");
 
     const onChangeInputOutput = () => {
@@ -111,7 +109,7 @@ const Swap: React.FC<Props> = ({
             }
         }
     }, [inputToken, outputToken, inputAmount]);
-    
+
     return (
         <div className={cn("flex flex-col gap-4 w-96 max-w-full", className)}>
             <div className="flex flex-col gap-2 items-center w-full">
@@ -122,6 +120,11 @@ const Swap: React.FC<Props> = ({
                     token={inputToken}
                     onChangeToken={setInputToken}
                     address={wallet?.address}
+                    priorityTokens={[
+                        'So11111111111111111111111111111111111111112', // SOL
+                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+                    ]}
                 />
                 <Button 
                     variant="ghost" 
@@ -137,6 +140,11 @@ const Swap: React.FC<Props> = ({
                     token={outputToken}
                     onChangeToken={setOutputToken}
                     address={wallet?.address}
+                    priorityTokens={[
+                        'So11111111111111111111111111111111111111112', // SOL
+                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+                    ]}
                 />
             </div>
             <Separator />

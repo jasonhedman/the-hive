@@ -24,15 +24,33 @@ import { Token } from '@/db/types';
 interface Props {
     value: Token | null,
     onChange: (token: Token | null) => void,
+    priorityTokens?: string[]
 }
 
-const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
+const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) => {
 
     const [open, setOpen] = useState(false);
 
     const [input, setInput] = useState("");
 
     const { results, loading } = useTokenSearch(input);
+
+    const sortedResults = React.useMemo(() => {
+        if (!results) return [];
+        
+        return results.sort((a, b) => {
+            // First check for priority tokens
+            const aIndex = priorityTokens.indexOf(a.id);
+            const bIndex = priorityTokens.indexOf(b.id);
+            
+            if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+            if (aIndex !== -1) return -1;
+            if (bIndex !== -1) return 1;
+
+            // keep order
+            return 0;
+        });
+    }, [results, priorityTokens, input]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -43,7 +61,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                     {
                         value ? (
                             <img 
-                                src={value.logoURI} 
+                                src={value.logoURI || '/placeholder.png'} 
                                 alt={value.name} 
                                 className="w-6 h-6 rounded-full" 
                             />
@@ -62,7 +80,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-2 flex flex-col gap-2">
                 <Input
-                    placeholder="Search token..."
+                    placeholder="Search tokens..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
@@ -73,12 +91,12 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                         <div className="flex flex-col gap-2 max-h-[300px] overflow-y-scroll">
                             {
                                 input ? (
-                                    results.length === 0 ? (
+                                    sortedResults.length === 0 ? (
                                         <p className="text-xs text-neutral-500">
                                             No results for &quot;{input}&quot;
                                         </p>
                                     ) : (
-                                        results.map((token) => (
+                                        sortedResults.map((token) => (
                                             <Button 
                                                 key={token.id}
                                                 variant="ghost"

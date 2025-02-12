@@ -22,9 +22,10 @@ interface Props {
     token: Token | null,
     onChangeToken?: (token: Token | null) => void,
     address?: string,
+    priorityTokens?: string[]
 }
 
-const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeToken, address }) => {
+const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeToken, address, priorityTokens }) => {
 
     const [isFocused, setIsFocused] = React.useState(false);
 
@@ -76,6 +77,7 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
                         <TokenSelect
                             value={token}
                             onChange={onChangeToken}
+                            priorityTokens={priorityTokens}
                         />
                     ) : (
                         token && (

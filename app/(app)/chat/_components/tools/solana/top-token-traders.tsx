@@ -82,33 +82,33 @@ const TopTokenTraders = ({ body }: { body: TopTokenTradersResultBodyType }) => {
                             <TableCell className="">
                                 <div className="flex flex-col w-full gap-1">
                                     <div className="flex justify-between text-xs">
-                                        <span className="text-green-500">
-                                            {((trader.tradeBuy / (trader.tradeBuy + trader.tradeSell)) * 100).toFixed(2)}%
-                                        </span>
                                         <span className="text-red-500">
                                             {((trader.tradeSell / (trader.tradeBuy + trader.tradeSell)) * 100).toFixed(2)}%
                                         </span>
+                                        <span className="text-green-500">
+                                            {((trader.tradeBuy / (trader.tradeBuy + trader.tradeSell)) * 100).toFixed(2)}%
+                                        </span>
                                     </div>
                                     <div className="flex w-full h-1 bg-neutral-800 rounded-full overflow-hidden">
-                                        <div 
-                                            className="bg-green-500 h-full"
-                                            style={{ 
-                                                width: `${(trader.tradeBuy / (trader.tradeBuy + trader.tradeSell)) * 100}%`
-                                            }}
-                                        />
                                         <div 
                                             className="bg-red-500 h-full"
                                             style={{ 
                                                 width: `${(trader.tradeSell / (trader.tradeBuy + trader.tradeSell)) * 100}%`
                                             }}
                                         />
+                                        <div 
+                                            className="bg-green-500 h-full"
+                                            style={{ 
+                                                width: `${(trader.tradeBuy / (trader.tradeBuy + trader.tradeSell)) * 100}%`
+                                            }}
+                                        />
                                     </div>
                                     <div className="flex justify-between text-xs">
-                                        <span className="text-green-500">
-                                            {trader.tradeBuy.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                                        </span>
                                         <span className="text-red-500">
                                             {trader.tradeSell.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                        </span>
+                                        <span className="text-green-500">
+                                            {trader.tradeBuy.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                                         </span>
                                     </div>
                                 </div>
