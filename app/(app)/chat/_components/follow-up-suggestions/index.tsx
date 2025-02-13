@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
-import StarterButton from '../starter-buttons/starter-button';
+import React, { useEffect, useState, useRef } from 'react'
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 import { Models } from '@/types/models';
-import { Message as MessageType } from 'ai';
+import { Button, Skeleton } from '@/components/ui';
+import { Message } from 'ai';
 
 interface Suggestion {
     title: string;
@@ -11,12 +11,12 @@ interface Suggestion {
     icon: "Plus";
 }
 
-const generateFollowUpSuggestions = async (context: string, model: Models) => {
+const generateFollowUpSuggestions = async (messages: Message[], model: Models) => {
     try {
         const response = await fetch('/api/follow-up-suggestions', {
             method: 'POST',
             body: JSON.stringify({
-                context,
+                messages,
                 modelName: model,
                 timestamp: Date.now()
             }),
@@ -35,45 +35,30 @@ const generateFollowUpSuggestions = async (context: string, model: Models) => {
     }
 }
 
-const globalSuggestionsCache = new Map<string, Suggestion[]>();
-
-const FollowUpSuggestions: React.FC<{ 
-    messageId: string;
-    previousMessage?: MessageType;
-    currentMessage: MessageType;
-}> = ({ messageId, previousMessage, currentMessage }) => {
-    const { model, sendMessage, isResponseLoading, messages, chatId } = useChat();
-    const [isLoading, setIsLoading] = useState(false);
+const FollowUpSuggestions: React.FC = () => {
+    const { model, sendMessage, isResponseLoading, messages, chatId, isLoading } = useChat();
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
     const requestTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const lastContextRef = useRef<string>('');
-    
+
     useEffect(() => {
         const generateSuggestions = async () => {
-            if (isResponseLoading || !currentMessage) return;
-            if (currentMessage.role !== 'assistant') return;
+            if (isResponseLoading || isLoading || !messages.length) return;
             
-            const cacheKey = `${chatId}-${messageId}`;
-            const context = previousMessage 
-                ? `User: ${previousMessage.content}\nBot: ${currentMessage.content}`
-                : currentMessage.content;
-
-            if (lastContextRef.current === `${chatId}-${context}`) return;
-            lastContextRef.current = `${chatId}-${context}`;
-
             if (requestTimeoutRef.current) {
                 clearTimeout(requestTimeoutRef.current);
             }
 
-            setIsLoading(true);
+            setIsGenerating(true);
             try {
-                const newSuggestions = await generateFollowUpSuggestions(context, model);
+                const newSuggestions = await generateFollowUpSuggestions(messages, model);
                 if (newSuggestions?.length > 0) {
-                    globalSuggestionsCache.set(cacheKey, newSuggestions);
+                    setSuggestions(newSuggestions);
                 }
             } catch (error) {
                 console.error('Error generating suggestions:', error);
             } finally {
-                setIsLoading(false);
+                setIsGenerating(false);
             }
         };
 
@@ -84,37 +69,37 @@ const FollowUpSuggestions: React.FC<{
                 clearTimeout(requestTimeoutRef.current);
             }
         };
-    }, [messageId, chatId, currentMessage.content, previousMessage?.content, model]);
+    }, [messages, chatId, model, isResponseLoading, isLoading]);
 
-    const currentSuggestions = globalSuggestionsCache.get(`${chatId}-${messageId}`) || [];
-
-    if (isLoading) {
-        return (
-            <div className="grid grid-cols-2 gap-2 mt-4">
-                {[...Array(4)].map((_, i) => (
-                    <div 
-                        key={i} 
-                        className="h-[72px] bg-gray-100 rounded-lg animate-pulse"
-                    />
-                ))}
-            </div>
-        );
-    }
-
-    if (currentSuggestions.length === 0) return null;
+    // Return null if loading or no current message
+    if (isLoading) return null;
 
     return (
-        <div className="grid grid-cols-2 gap-2 mt-4">
-            {currentSuggestions.map((suggestion) => (
-                <StarterButton 
-                    key={`${chatId}-${messageId}-${suggestion.title}`}
-                    {...suggestion}
-                    onClick={() => {
-                        sendMessage(suggestion.prompt);
-                        globalSuggestionsCache.delete(`${chatId}-${messageId}`);
-                    }}
-                />
-            ))}
+        <div className="grid grid-cols-3 gap-2 mt-4">
+            {
+                isGenerating ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <Skeleton
+                            key={index}
+                            className="w-full h-[22px]"
+                        />
+                    ))
+                ) : (
+                    suggestions.map((suggestion) => (
+                        <Button
+                            key={`${chatId}-${suggestion.title}`}
+                            variant="outline"
+                            className="w-full text-xs h-fit py-0.5"
+                            onClick={() => {
+                                sendMessage(suggestion.prompt);
+                                setSuggestions([]);
+                            }}
+                        >
+                            {suggestion.title}
+                        </Button>
+                    ))
+                )
+            }
         </div>
     );
 };

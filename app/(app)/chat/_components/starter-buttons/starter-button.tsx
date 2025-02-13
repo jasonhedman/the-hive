@@ -16,7 +16,6 @@ interface Props {
     description: string
     prompt: string,
     className?: string
-    onClick?: () => void
 }
 
 const StarterButton: React.FC<Props> = ({ icon, title, description, prompt, className }) => {
