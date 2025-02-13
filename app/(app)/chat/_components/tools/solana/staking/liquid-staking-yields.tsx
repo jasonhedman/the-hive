@@ -43,7 +43,7 @@ const LiquidStakingYields: React.FC<{ body: LiquidStakingYieldsResultBodyType }>
                 body.map((item) => (
                     <Card 
                         key={item.name}
-                        className="flex flex-row gap-2 items-center p-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                        className="flex flex-row gap-2 items-center p-2 cursor-pointer hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300"
                         onClick={() => handleStakeClick(item.tokenData.symbol)}
                     >
                         <img 
