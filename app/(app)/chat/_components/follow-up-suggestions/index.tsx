@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 import { Models } from '@/types/models';
-import { Button, Skeleton } from '@/components/ui';
+import { Button, Skeleton, Icon } from '@/components/ui';
 import { Message } from 'ai';
 
 interface Suggestion {
@@ -95,6 +95,7 @@ const FollowUpSuggestions: React.FC = () => {
                                 setSuggestions([]);
                             }}
                         >
+                            <Icon name="Plus" className="w-3 h-3" />
                             {suggestion.title}
                         </Button>
                     ))
