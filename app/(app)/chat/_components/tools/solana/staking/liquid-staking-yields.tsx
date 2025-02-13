@@ -1,10 +1,10 @@
 import React from 'react'
-
+import { useChat } from '@/app/(app)/chat/_contexts/chat';
 import ToolCard from '../../tool-card';
+import { Card } from '@/components/ui';
 
 import type { ToolInvocation } from 'ai';
 import type { LiquidStakingYieldsResultBodyType, LiquidStakingYieldsResultType } from '@/ai';
-import { Card } from '@/components/ui';
 
 interface Props {
     tool: ToolInvocation,
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const LiquidStakingYieldsTool: React.FC<Props> = ({ tool, prevToolAgent }) => {
-
     return (
         <ToolCard 
             tool={tool}
@@ -23,7 +22,7 @@ const LiquidStakingYieldsTool: React.FC<Props> = ({ tool, prevToolAgent }) => {
                     : "No staking yields found",
                 body: (result: LiquidStakingYieldsResultType) => result.body 
                     ? <LiquidStakingYields body={result.body} /> 
-                    :  "No staking yields found"
+                    : "No staking yields found"
             }}
             prevToolAgent={prevToolAgent}
             className="w-full"
@@ -32,6 +31,11 @@ const LiquidStakingYieldsTool: React.FC<Props> = ({ tool, prevToolAgent }) => {
 }
 
 const LiquidStakingYields: React.FC<{ body: LiquidStakingYieldsResultBodyType }> = ({ body }) => {
+    const { sendMessage } = useChat();
+
+    const handleStakeClick = (symbol: string) => {
+        sendMessage(`I want to stake SOL using ${symbol}`);
+    };
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -39,7 +43,8 @@ const LiquidStakingYields: React.FC<{ body: LiquidStakingYieldsResultBodyType }>
                 body.map((item) => (
                     <Card 
                         key={item.name}
-                        className="flex flex-row gap-2 items-center p-2"
+                        className="flex flex-row gap-2 items-center p-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                        onClick={() => handleStakeClick(item.tokenData.symbol)}
                     >
                         <img 
                             src={item.tokenData.logoURI} 

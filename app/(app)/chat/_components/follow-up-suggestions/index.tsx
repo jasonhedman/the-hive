@@ -71,7 +71,6 @@ const FollowUpSuggestions: React.FC = () => {
         };
     }, [messages, chatId, model, isResponseLoading, isLoading]);
 
-    // Return null if loading or no current message
     if (isLoading) return null;
 
     return (
