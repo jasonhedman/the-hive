@@ -1,0 +1,107 @@
+import React, { useEffect, useState, useRef } from 'react'
+import { useChat } from '@/app/(app)/chat/_contexts/chat';
+import { Models } from '@/types/models';
+import { Button, Skeleton } from '@/components/ui';
+import { Message } from 'ai';
+
+interface Suggestion {
+    title: string;
+    description: string;
+    prompt: string;
+    icon: "Plus";
+}
+
+const generateFollowUpSuggestions = async (messages: Message[], model: Models) => {
+    try {
+        const response = await fetch('/api/follow-up-suggestions', {
+            method: 'POST',
+            body: JSON.stringify({
+                messages,
+                modelName: model,
+                timestamp: Date.now()
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+        });
+        
+        return await response.json() as Suggestion[];
+    } catch (error) {
+        console.error("Error generating suggestions:", error);
+        return [];
+    }
+}
+
+const FollowUpSuggestions: React.FC = () => {
+    const { model, sendMessage, isResponseLoading, messages, chatId, isLoading } = useChat();
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+    const requestTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        const generateSuggestions = async () => {
+            if (isResponseLoading || isLoading || !messages.length) return;
+            
+            if (requestTimeoutRef.current) {
+                clearTimeout(requestTimeoutRef.current);
+            }
+
+            setIsGenerating(true);
+            try {
+                const newSuggestions = await generateFollowUpSuggestions(messages, model);
+                if (newSuggestions?.length > 0) {
+                    setSuggestions(newSuggestions);
+                }
+            } catch (error) {
+                console.error('Error generating suggestions:', error);
+            } finally {
+                setIsGenerating(false);
+            }
+        };
+
+        generateSuggestions();
+
+        return () => {
+            if (requestTimeoutRef.current) {
+                clearTimeout(requestTimeoutRef.current);
+            }
+        };
+    }, [messages, chatId, model, isResponseLoading, isLoading]);
+
+    // Return null if loading or no current message
+    if (isLoading) return null;
+
+    return (
+        <div className="grid grid-cols-3 gap-2 mt-4">
+            {
+                isGenerating ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <Skeleton
+                            key={index}
+                            className="w-full h-[22px]"
+                        />
+                    ))
+                ) : (
+                    suggestions.map((suggestion) => (
+                        <Button
+                            key={`${chatId}-${suggestion.title}`}
+                            variant="outline"
+                            className="w-full text-xs h-fit py-0.5"
+                            onClick={() => {
+                                sendMessage(suggestion.prompt);
+                                setSuggestions([]);
+                            }}
+                        >
+                            {suggestion.title}
+                        </Button>
+                    ))
+                )
+            }
+        </div>
+    );
+};
+
+export default FollowUpSuggestions;
